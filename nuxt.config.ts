@@ -1,15 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  modules: ["@pinia/nuxt"],
+  modules: [["@pinia/nuxt", { autoImports: ["defineStore", "createPinia"] }]],
+ 
   imports: {
-    
     dirs: ["./stores", "./helper"],
   },
   alias: {
     assets: "/<rootDir>/assets",
   },
-  css: ["~/assets/Style.sass"],
+  css: ['~/assets/scss/main.scss'],
+
   postcss: {
     plugins: {
       tailwindcss: {},

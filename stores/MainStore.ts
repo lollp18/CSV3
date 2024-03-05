@@ -1,3 +1,5 @@
+import { createPinia } from "pinia"
+
 type state = {
   UserData:
     | {
@@ -8,7 +10,7 @@ type state = {
 
   CurrentTable: CurrentTable | undefined
 
-  CurrentTables: ArrayNever
+  CurrentTables: CurrentTables | ArrayNever
 
   CurrentTabelleID: NumberUndefined
 
@@ -23,7 +25,7 @@ type state = {
   }
 
   DownloadFileHref: string
-  
+
   TableBearbeitenOpen: Boolean
   TableBearbeiten: {
     Error: StringUndefined
@@ -107,7 +109,7 @@ type state = {
 
   AngemedetBleiben: Boolean
   SeitenVerwenden: {
-    CurrentSeiten: ArrayNever
+    CurrentSeiten: ArraySeite | ArrayNever
     SeitenLängeMax: number
     SeitenLängeMin: number
     ZellenWidth: number
@@ -314,21 +316,18 @@ export const UseMainStore = defineStore("csv", {
     },
     SeitenBerechnen() {
       this.SeitenVerwenden.CurrentSeiten = []
-      const seiteErste = {
-        Zahl: 1,
-        Start: 1,
-        Ende: this.SeitenVerwenden.SeitenLängeMax - 1,
-      }
+      const seiteErste = new Seite()
       this.SeitenVerwenden.CurrentSeiten.push(seiteErste)
       this.SeitenAnzahl()
 
       for (let i = 0; i < this.SeitenVerwenden.SeitenAnzahl; i++) {
         const currentSeite = this.SeitenVerwenden.CurrentSeiten[i]
-        const seite = {
-          Zahl: currentSeite.Zahl + 1,
-          Start: currentSeite.Ende + 1,
-          Ende: currentSeite.Ende + this.SeitenVerwenden.SeitenLängeMax - 1,
-        }
+        const seite = new Seite(
+          currentSeite.Zahl + 1,
+          currentSeite.Ende + 1,
+          currentSeite.Ende + this.SeitenVerwenden.SeitenLängeMax - 1
+        )
+
         this.SeitenVerwenden.CurrentSeiten.push(seite)
       }
     },
@@ -728,12 +727,12 @@ export const UseMainStore = defineStore("csv", {
     },
     // Download File
 
-    async mDownlodFile(TableIndex) {
+    async mDownlodFile(TableIndex: number) {
       const Data = this.FormatData(this.CurrentTables[TableIndex].TableData)
 
       this.DownloadFile.Href = `data:text/csv;charset=utf-8,${Data}`
     },
-    FormatData(data) {
+    FormatData(data: TableDataMap) {
       const Formatdata = []
 
       data.forEach((Zeile) => {
@@ -1005,7 +1004,7 @@ export const UseMainStore = defineStore("csv", {
         console.error(error.message)
       }
     },
-    async DeleteTable(tableID) {
+    async DeleteTable(tableID: string) {
       try {
         const res = await axios.delete(
           `${this.ApiURLs.ApiUrlDeletTable}${tableID}`,
@@ -1021,3 +1020,9 @@ export const UseMainStore = defineStore("csv", {
     },
   },
 })
+
+const pinia = createPinia()
+const app = useNuxtApp().vueApp
+app.use(pinia)
+
+export const store = UseMainStore()

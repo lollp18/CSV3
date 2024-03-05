@@ -14,6 +14,7 @@ export const Zelle = class {
     this.ZellenInhalt = ZellenInhalt.trim()
   }
 }
+
 export type TableDataMap = Map<number, Map<number, Zelle>>
 export type TableDataArray = Array<Array<Zelle>>
 export type TableData = TableDataMap | TableDataArray
@@ -130,5 +131,28 @@ export const Table = class {
     TableData.forEach((Zeile) => {
       this.TableData.push(Array.from(Zeile).map(([name, value]) => value))
     })
+  }
+}
+
+export type ArraySeite = Array<Seite>
+export type Seite = {
+  Zahl: number
+  Start: number
+  Ende: number
+}
+
+export const Seite = class {
+  private Zahl: number
+  private Start: number
+  private Ende: number
+
+  constructor(
+    Zahl: number = 1,
+    Start: number = 1,
+    Ende: number = store.SeitenVerwenden.SeitenLängeMax - 1
+  ) {
+    this.Zahl = Zahl
+    this.Start = Start
+    this.Ende = Ende
   }
 }

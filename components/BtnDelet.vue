@@ -6,7 +6,7 @@
   </div>
 </template>
 <style scoped lang="sass">
-@import "../Style.sass"
+
 .BtnDelet
   @include Zelle()
   @include Center()

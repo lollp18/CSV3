@@ -1,6 +1,3 @@
-<script setup>
-const store = UseMainStore()
-</script>
 <script>
 export default {
   name: "draggableContainer",
@@ -103,7 +100,7 @@ export default {
 </template>
 
 <style scoped lang="sass">
-@import "../Style.sass"
+
 .draggable-container
   @include DreiD()
   position: absolute
