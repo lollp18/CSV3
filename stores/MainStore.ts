@@ -1,143 +1,3 @@
-import { createPinia } from "pinia"
-
-type state = {
-  UserData:
-    | {
-        Username: string
-        _id: string
-      }
-    | undefined
-
-  CurrentTable: CurrentTable | undefined
-
-  CurrentTables: CurrentTables | ArrayNever
-
-  CurrentTabelleID: NumberUndefined
-
-  TabelenGröße: {
-    höhe: number
-    breite: number
-  }
-
-  ConfirmationWindow: {
-    ConfirmationWindowOpen: Boolean
-    Text: string
-  }
-
-  DownloadFileHref: string
-
-  TableBearbeitenOpen: Boolean
-  TableBearbeiten: {
-    Error: StringUndefined
-
-    Sections: {
-      ZeileEinfügen: Boolean
-      SpalteEinfügen: Boolean
-      ZeileTauschen: Boolean
-      SpalteTauschen: Boolean
-      ZellenTauschen: Boolean
-      Aside: Boolean
-    }
-
-    Einfügen: {
-      Zeilen: {
-        Zeile: NumberUndefined
-        Position: "Über" | "Unter"
-        Anzahl: NumberUndefined
-      }
-      Spalten: {
-        Spalte: NumberUndefined
-        Position: "R" | "L"
-        Anzahl: NumberUndefined
-      }
-    }
-
-    Tauschen: {
-      Zeilen: {
-        Erste: NumberUndefined
-        Zweite: NumberUndefined
-      }
-      Spalten: {
-        Erste: NumberUndefined
-        Zweite: NumberUndefined
-      }
-    }
-    ZellenTauschen: {
-      ErsteZelle: {
-        Zeile: NumberUndefined
-        Spalte: NumberUndefined
-      }
-      ZweiteZelle: {
-        Zeile: NumberUndefined
-        Spalte: NumberUndefined
-      }
-    }
-    ZeileTemp: {
-      zeile: ArrayNever
-      InsertPositon: NumberUndefined
-    }
-    SpalteTemp: {
-      spalten: ArrayNever
-      InsertPositon: NumberUndefined
-    }
-  }
-
-  NewTableIsOpen: Boolean
-
-  NewTable: {
-    Error: StringUndefined
-    TableName: string
-    AnzahlZeilen: NumberUndefined
-    AnzahlSpalten: NumberUndefined
-  }
-
-  Registrieren: {
-    Username: StringUndefined
-    Email: StringUndefined
-    Passwort: StringUndefined
-    PasswortWiederholen: StringUndefined
-  }
-
-  RegistrierenCheck: StringUndefined
-
-  Anmelden: {
-    Email: string
-    Passwort: string
-  }
-
-  AnmeldenCheck: StringUndefined
-
-  AngemedetBleiben: Boolean
-  SeitenVerwenden: {
-    CurrentSeiten: ArraySeite | ArrayNever
-    SeitenLängeMax: number
-    SeitenLängeMin: number
-    ZellenWidth: number
-    SeitenAnzahl: number
-    WindowHeight: number
-
-    CurrentSeite: {
-      Zahl: number
-      Start: number
-      Ende: NumberUndefined
-    }
-  }
-
-  ApiURLs: {
-    CurrentUrl: string
-    BaseUrl: string
-    BaseUrlLocl: string
-    ApiUrlUsersRegistrieren: string
-    ApiUrlUsersAnmelden: string
-    ApiUrlUserTablen: StringUndefined
-    ApiUrlDeletTable: StringUndefined
-    requestOptions: {
-      withCredentials: boolean
-      baseURL: string
-    }
-  }
-}
-
 export const UseMainStore = defineStore("csv", {
   state: (): state => ({
     UserData: {
@@ -236,9 +96,10 @@ export const UseMainStore = defineStore("csv", {
     // Login
 
     Anmelden: {
-      Email: "Lorenzo123696@gmail.com",
+      Email: "Lorenzo12696@gmail.com",
       Passwort: "123",
     },
+    AbmeldenStatus: undefined,
     AnmeldenCheck: undefined,
 
     AngemedetBleiben: false,
@@ -250,7 +111,7 @@ export const UseMainStore = defineStore("csv", {
       SeitenLängeMin: 0,
       ZellenWidth: 77,
       SeitenAnzahl: 0,
-      WindowHeight: document.documentElement.clientWidth,
+      WindowHeight: useNuxtApp().vueApp._container?.clientWidth,
 
       CurrentSeite: {
         Zahl: 1,
@@ -306,7 +167,8 @@ export const UseMainStore = defineStore("csv", {
       )
     },
     ResizeWindow() {
-      this.SeitenVerwenden.WindowHeight = document.documentElement.clientWidth
+      this.SeitenVerwenden.WindowHeight =
+        useNuxtApp().vueApp._container?.clientWidth
       this.BrechneMax()
       this.SeitenBerechnen()
 
@@ -316,7 +178,7 @@ export const UseMainStore = defineStore("csv", {
     },
     SeitenBerechnen() {
       this.SeitenVerwenden.CurrentSeiten = []
-      const seiteErste = new Seite()
+      const seiteErste = new Seite(this.SeitenVerwenden.SeitenLängeMax - 1)
       this.SeitenVerwenden.CurrentSeiten.push(seiteErste)
       this.SeitenAnzahl()
 
@@ -748,7 +610,7 @@ export const UseMainStore = defineStore("csv", {
     },
     //Tabelle Löschen
 
-    SpalteLöschen(Index) {
+    SpalteLöschen(Index: number) {
       let temp = this.CurrentTable.TableData
       let temp2 = new Map()
       let newKey = 0
@@ -878,7 +740,7 @@ export const UseMainStore = defineStore("csv", {
 
       this.CurrentTable = this.CurrentTables[TableIndex]
     },
-    SetCurrentURL(ApiString) {
+    SetCurrentURL(ApiString: string) {
       this.ApiURLs.CurrentUrl = ApiString
 
       this.ApiURLs.ApiUrlUsersAnmelden =
@@ -924,6 +786,7 @@ export const UseMainStore = defineStore("csv", {
 
         if (res.status === 202) {
           this.AnmeldenCheck = res.data
+          this.AbmeldenStatus = 202
         } else if (res.status === 201) {
           this.UserData = {
             Username: res.data.Username,
@@ -938,7 +801,7 @@ export const UseMainStore = defineStore("csv", {
             sessionStorage.setItem("Csv", dataAnmelden)
           }
 
-          router.push({ name: "Csv" })
+          this.AbmeldenStatus = 201
         }
       } catch (error) {
         console.error(error.message)
@@ -963,7 +826,7 @@ export const UseMainStore = defineStore("csv", {
           if (res.status === 202) {
             this.RegistrierenCheck = res.data
           } else if (res.status === 201) {
-            router.push({ name: "Login" })
+            route.push({ path: "/Login" })
           }
         }
       } catch (error) {
@@ -1020,9 +883,3 @@ export const UseMainStore = defineStore("csv", {
     },
   },
 })
-
-const pinia = createPinia()
-const app = useNuxtApp().vueApp
-app.use(pinia)
-
-export const store = UseMainStore()

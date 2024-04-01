@@ -1,15 +1,25 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  modules: [["@pinia/nuxt", { autoImports: ["defineStore", "createPinia"] }]],
- 
+  modules: [
+    "@vueuse/nuxt",
+    ["@pinia/nuxt", { autoImports: ["defineStore", "createPinia"] }],
+  ],
+
   imports: {
     dirs: ["./stores", "./helper"],
   },
-  alias: {
-    assets: "/<rootDir>/assets",
+  hooks: {
+    "pages:extend"(pages) {
+      // add a route
+      pages.push({
+        name: "Login",
+        path: "/",
+        file: "~/pages/Login.vue",
+      })
+    },
   },
-  css: ['~/assets/scss/main.scss'],
+  css: ["~/assets/style/main.sass"],
 
   postcss: {
     plugins: {
@@ -17,6 +27,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
   typescript: {
     typeCheck: true,
   },

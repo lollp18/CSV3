@@ -100,7 +100,7 @@ export default {
 </template>
 
 <style scoped lang="sass">
-
+@import "../assets/style/main.sass"
 .draggable-container
   @include DreiD()
   position: absolute

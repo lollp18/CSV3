@@ -1,5 +1,5 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
+
 const store = UseMainStore()
 </script>
 
@@ -21,7 +21,7 @@ const store = UseMainStore()
         <a
           class="BtnDownload"
           @click="store.mDownlodFile(TableIndex)"
-          :href="store.DownloadFile.Href"
+          :href="store.DownloadFileHref"
           :download="TableName">
           <ion-icon name="download-outline"></ion-icon>
         </a>
@@ -69,7 +69,7 @@ const store = UseMainStore()
 </template>
 <style scoped lang="sass">
 
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 
 footer
   display: flex

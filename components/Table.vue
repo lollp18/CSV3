@@ -1,15 +1,5 @@
 <script setup>
-import {
-  ref,
-  nextTick,
-  onMounted,
-  onBeforeMount,
-  onUpdated,
-  onUnmounted,
-} from "vue"
 
-import { UseMainStore } from "../stores/MainStore.js"
-import BtnDelet from "./BtnDelet.vue"
 const store = UseMainStore()
 </script>
 
@@ -176,7 +166,7 @@ const store = UseMainStore()
   </table>
 </template>
 <style scoped lang="sass">
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 
 .rapperTop-btnDelet
   display: flex

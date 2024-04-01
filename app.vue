@@ -1,17 +1,20 @@
-<script setup>
+<script setup lang="ts">
+useHead({
+  title: "CSV",
+})
+
+const store = UseMainStore()
 onBeforeMount(() => {
-  store.SetCurrentURL(store.ApiURLs.BaseUrl)
+  store.SetCurrentURL(store.ApiURLs.BaseUrlLocl)
 })
 </script>
 
 <template>
-  <div>
-    <NuxtPage />
-  </div>
+  <NuxtPage />
 </template>
 <style lang="sass">
 /* --- Global Styls --- */
-
+@import "./assets/style/main.sass"
 
 [name="close-outline"]
   color: $InvalideCloseColor
@@ -48,7 +51,7 @@ h1
   @include Button()
   margin-bottom: 2rem
 
-#app
+#__nuxt
   display: flex
   flex-direction: column
   height: 100%

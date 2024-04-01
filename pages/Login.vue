@@ -1,5 +1,4 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
 const store = UseMainStore()
 </script>
 
@@ -18,17 +17,18 @@ const store = UseMainStore()
         v-model="store.Anmelden.Passwort"
         placeholder="Passwort" />
 
-      <button
-        @click.prevent="store.mAnmelden()"
-        class="btn font">
+      <NuxtLink
+        @click="store.mAnmelden()"
+        to="/Csv"
+        class="router-link btn">
         Anmelden
-      </button>
+      </NuxtLink>
 
-      <router-link
-        :to="{ name: 'Registrieren' }"
+      <NuxtLink
+        to="/Registrieren"
         class="router-link btn">
         Registrieren
-      </router-link>
+      </NuxtLink>
 
       <input
         class="checkbox"
@@ -39,10 +39,10 @@ const store = UseMainStore()
 </template>
 
 <style scoped lang="sass">
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 
 .FormWrapper
-  @include Center()
+  @include Center
   width: 100%
   height: 100%
 

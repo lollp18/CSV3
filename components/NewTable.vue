@@ -1,5 +1,5 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
+
 
 const store = UseMainStore()
 </script>
@@ -34,7 +34,7 @@ const store = UseMainStore()
 </template>
 <style lang="sass" scoped>
 
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 
 .new-Tabel-bg
   @include Center

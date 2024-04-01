@@ -11,11 +11,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.6",
     "@pinia/nuxt": "^0.5.1",
+    "@vueuse/nuxt": "^10.9.0",
     "axios": "^1.6.7",
-    "nuxt": "^3.10.3",
-    "pina": "^0.20.2204228",
     "pinia": "^2.1.7",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
@@ -24,8 +22,9 @@
     "@nuxtjs/style-resources": "^1.2.2",
     "@types/node": "^20.11.20",
     "autoprefixer": "^10.4.17",
+    "nuxt": "^3.10.3",
     "postcss": "^8.4.35",
-    "sass": "^1.71.1",
+    "sass": "^1.69.5",
     "sass-loader": "^14.1.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",

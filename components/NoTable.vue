@@ -4,7 +4,7 @@
   </div>
 </template>
 <style scoped lang="sass">
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 div
   width: 100%
   height: 100%

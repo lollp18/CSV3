@@ -1,5 +1,5 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
+
 
 const store = UseMainStore()
 </script>

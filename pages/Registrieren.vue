@@ -1,6 +1,4 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
-
 const store = UseMainStore()
 </script>
 
@@ -49,7 +47,7 @@ const store = UseMainStore()
 </template>
 <style scoped lang="sass">
 
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 .FormRapper
   @include Center()
   width: 100%

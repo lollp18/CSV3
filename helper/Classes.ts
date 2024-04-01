@@ -1,3 +1,5 @@
+
+
 export type NumberUndefined = number | undefined
 export type StringUndefined = string | undefined
 export type ArrayNever = Array<never>
@@ -146,11 +148,7 @@ export const Seite = class {
   private Start: number
   private Ende: number
 
-  constructor(
-    Zahl: number = 1,
-    Start: number = 1,
-    Ende: number = store.SeitenVerwenden.SeitenLängeMax - 1
-  ) {
+  constructor(Ende: number, Zahl: number = 1, Start: number = 1) {
     this.Zahl = Zahl
     this.Start = Start
     this.Ende = Ende

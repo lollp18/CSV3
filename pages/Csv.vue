@@ -1,16 +1,4 @@
 <script setup>
-import { UseMainStore } from "../stores/MainStore.js"
-import { nextTick, onMounted, onBeforeMount, onUpdated, onUnmounted } from "vue"
-
-// Compnents
-import ConfirmationWindow from "./ConfirmationWindow.vue"
-import NewTable from "./NewTable.vue"
-import Bearbeiten from "./Bearbeiten.vue"
-import Header from "./Header.vue"
-import Table from "./Table.vue"
-import NoTable from "./NoTable.vue"
-import Footer from "./Footer.vue"
-
 const store = UseMainStore()
 
 onBeforeMount(async () => {
@@ -44,7 +32,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ConfirmationWindow v-if="store.ConfirmationWindow.ConfirmationWindowOpen" />
   <Bearbeiten v-if="store.TableBearbeitenOpen" />
   <NewTable v-if="store.NewTableIsOpen" />
 
@@ -57,5 +44,5 @@ onUnmounted(() => {
 
 <style scoped lang="sass">
 
-@import "../Style.sass"
+@import "../assets/style/main.sass"
 </style>
