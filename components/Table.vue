@@ -1,7 +1,4 @@
-<script setup>
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 
 <template>
   <table>
@@ -11,25 +8,25 @@ const store = UseMainStore()
         <div class="zelle-placeholder"></div>
         <div class="zelle-placeholder"></div>
         <BtnDelet
-          v-if="store.FirstZeileLength > 2"
-          @click="store.SpalteLöschen(1)" />
+          v-if="MainStore.FirstZeileLength > 2"
+          @click="MainStore.SpalteLöschen(1)" />
         <div
           v-else
           class="zelle-placeholder"></div>
         <div
-          v-for="NummberFirstZeile in store.FirstZeileLength"
+          v-for="NummberFirstZeile in MainStore.FirstZeileLength"
           :key="NummberFirstZeile">
           <BtnDelet
-            @click="store.SpalteLöschen(NummberFirstZeile)"
+            @click="MainStore.SpalteLöschen(NummberFirstZeile)"
             v-if="
-              store.FirstZeileLength > 2 &&
+              MainStore.FirstZeileLength > 2 &&
               NummberFirstZeile > 1 &&
-              NummberFirstZeile >= store.CurrentSeiteStart &&
-              NummberFirstZeile <= store.CurrentSeiteEnde
+              NummberFirstZeile >= MainStore.CurrentSeiteStart &&
+              NummberFirstZeile <= MainStore.CurrentSeiteEnde
             " />
         </div>
         <div
-          v-if="store.FirstZeileLength <= 2"
+          v-if="MainStore.FirstZeileLength <= 2"
           class="zelle-placeholder"></div>
       </div>
       <!-- Tabel Header Spalten Nummern -->
@@ -38,14 +35,14 @@ const store = UseMainStore()
         <div class="zelle-placeholder"></div>
         <div class="zelle-nummer">1</div>
         <div
-          v-for="NummberFirstZeile in store.FirstZeileLength"
+          v-for="NummberFirstZeile in MainStore.FirstZeileLength"
           :key="NummberFirstZeile">
           <div
             class="zelle-nummer"
             v-if="
               NummberFirstZeile > 1 &&
-              NummberFirstZeile >= store.CurrentSeiteStart &&
-              NummberFirstZeile <= store.CurrentSeiteEnde
+              NummberFirstZeile >= MainStore.CurrentSeiteStart &&
+              NummberFirstZeile <= MainStore.CurrentSeiteEnde
             ">
             {{ NummberFirstZeile }}
           </div>
@@ -54,8 +51,8 @@ const store = UseMainStore()
       <!-- Tabel Header Data -->
       <td class="t-header">
         <btnDelet
-          v-if="store.CurrentTableLength > 2"
-          @click="store.ZeileLöschen(1)" />
+          v-if="MainStore.CurrentTableLength > 2"
+          @click="MainStore.ZeileLöschen(1)" />
         <div
           v-else
           class="zelle-placeholder"></div>
@@ -63,23 +60,32 @@ const store = UseMainStore()
         <div class="t-header">
           <div
             ref="zelle"
-            :class="store.FirstZelleActive ? 'zelle-activ' : 'zelle'"
+            :class="MainStore.FirstZelleActive ? 'zelle-activ' : 'zelle'"
             @click="
-              store.InitZelleBerarbeiten(1, 1, store.FirstZelleZellenInhalt)
+              MainStore.InitZelleBerarbeiten(
+                1,
+                1,
+                MainStore.FirstZelleZellenInhalt
+              )
             ">
-            {{ store.FirstZelleZellenInhalt }}
+            {{ MainStore.FirstZelleZellenInhalt }}
           </div>
           <div
-            v-for="[ZellenIndex, { ZellenInhalt, Activ }] in store.FirstZeile"
+            v-for="[
+              ZellenIndex,
+              { ZellenInhalt, Activ },
+            ] in MainStore.FirstZeile"
             :key="ZellenIndex">
             <div
               v-if="
                 ZellenIndex > 1 &&
-                ZellenIndex >= store.CurrentSeiteStart &&
-                ZellenIndex <= store.CurrentSeiteEnde
+                ZellenIndex >= MainStore.CurrentSeiteStart &&
+                ZellenIndex <= MainStore.CurrentSeiteEnde
               "
               :class="Activ ? 'zelle-activ' : 'zelle'"
-              @click="store.InitZelleBerarbeiten(1, ZellenIndex, ZellenInhalt)">
+              @click="
+                MainStore.InitZelleBerarbeiten(1, ZellenIndex, ZellenInhalt)
+              ">
               {{ ZellenInhalt }}
             </div>
           </div>
@@ -91,21 +97,21 @@ const store = UseMainStore()
       <!-- Tabel Seitenleiste BTN Delet -->
       <div class="rapperSide-btnDelet">
         <div
-          v-for="NummernTableData in store.CurrentTableLength"
+          v-for="NummernTableData in MainStore.CurrentTableLength"
           :key="NummernTableData">
           <btnDelet
-            v-if="NummernTableData != 1 && store.CurrentTableLength > 2"
-            @click="store.ZeileLöschen(NummernTableData)" />
+            v-if="NummernTableData != 1 && MainStore.CurrentTableLength > 2"
+            @click="MainStore.ZeileLöschen(NummernTableData)" />
         </div>
         <div
-          v-if="store.CurrentTableLength <= 2"
+          v-if="MainStore.CurrentTableLength <= 2"
           class="zelle-placeholder"></div>
       </div>
       <!-- Tabel Seitenleiste Zeilen Nummern -->
       <div>
         <div
           class="rapperSide-btnDelet"
-          v-for="NummernTableData in store.CurrentTableLength"
+          v-for="NummernTableData in MainStore.CurrentTableLength"
           :key="NummernTableData">
           <div
             class="zelle-nummer"
@@ -117,7 +123,7 @@ const store = UseMainStore()
       <!-- Tabel Seitenleiste  Data-->
       <td>
         <div
-          v-for="[ZeilenKey, Zellen] in store.CurrentTableTableData"
+          v-for="[ZeilenKey, Zellen] in MainStore.CurrentTableTableData"
           :key="ZeilenKey">
           <div v-if="ZeilenKey != 1">
             <div
@@ -126,7 +132,11 @@ const store = UseMainStore()
               <div
                 :class="Activ ? 'zelle-activ' : 'zelle'"
                 @click="
-                  store.InitZelleBerarbeiten(ZeilenKey, ZellenKey, ZellenInhalt)
+                  MainStore.InitZelleBerarbeiten(
+                    ZeilenKey,
+                    ZellenKey,
+                    ZellenInhalt
+                  )
                 "
                 v-if="ZellenKey < 2">
                 {{ ZellenInhalt }}
@@ -138,7 +148,7 @@ const store = UseMainStore()
       <!-- Tabel Body Data -->
       <td class="t-body">
         <div
-          v-for="[ZeilenKey, Zellen] in store.CurrentTableTableData"
+          v-for="[ZeilenKey, Zellen] in MainStore.CurrentTableTableData"
           :key="ZeilenKey">
           <div
             class="zeile"
@@ -149,12 +159,16 @@ const store = UseMainStore()
               <div
                 :class="Activ ? 'zelle-activ' : 'zelle'"
                 @click="
-                  store.InitZelleBerarbeiten(ZeilenKey, ZellenKey, ZellenInhalt)
+                  MainStore.InitZelleBerarbeiten(
+                    ZeilenKey,
+                    ZellenKey,
+                    ZellenInhalt
+                  )
                 "
                 v-if="
                   ZellenKey > 1 &&
-                  ZellenKey >= store.CurrentSeiteStart &&
-                  ZellenKey <= store.CurrentSeiteEnde
+                  ZellenKey >= MainStore.CurrentSeiteStart &&
+                  ZellenKey <= MainStore.CurrentSeiteEnde
                 ">
                 {{ ZellenInhalt }}
               </div>

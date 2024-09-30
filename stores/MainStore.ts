@@ -1,331 +1,298 @@
-export const UseMainStore = defineStore("csv", {
-  state: (): state => ({
+export const UseMainStore = defineStore("MainStore", {
+  state: (): StateMainStore => ({
     UserData: {
       Username: "",
       _id: "",
     },
-    CurrentTable: undefined,
-
-    CurrentTables: [],
-    CurrentTabelleID: undefined,
-
-    TabelenGröße: {
-      höhe: 0,
-      breite: 0,
+  
+    CurrentTable:undefined,
+  
+    CurrentTables: new Map(),
+  
+    CurrentTableId: 1,
+  
+    TableSize: {
+      Height: 0,
+      Width: 0,
     },
-
+  
     ConfirmationWindow: {
-      ConfirmationWindowOpen: false,
+      IsOpen: false,
       Text: "",
     },
-
-    // Uploade Download CSV File
-
+  
     DownloadFileHref: "",
-
-    //Tabelle bearbeiten
-    TableBearbeitenOpen: false,
-    TableBearbeiten: {
-      Error: undefined,
-
+  
+    TableEdit: {
+      IsOpen: false,
+      Error: "",
+  
       Sections: {
-        ZeileEinfügen: true,
-        SpalteEinfügen: false,
-        ZeileTauschen: false,
-        SpalteTauschen: false,
-        ZellenTauschen: false,
-        Aside: false,
+        InsertRow: false,
+        InsertColumn: false,
+        SwapRows: false,
+        SwapColumns: false,
+        SwapCells: false,
+        Navigation: false,
       },
-
-      Einfügen: {
-        Zeilen: {
-          Zeile: undefined,
-          Position: "Über",
-          Anzahl: undefined,
+  
+      Insert: {
+        Rows: {
+          Row: 0,
+          Position: "Above" ,
+          Amount: 0,
         },
-        Spalten: { Spalte: undefined, Position: "L", Anzahl: undefined },
-      },
-
-      Tauschen: {
-        Zeilen: {
-          Erste: undefined,
-          Zweite: undefined,
-        },
-        Spalten: {
-          Erste: undefined,
-          Zweite: undefined,
+        Columns: {
+          Column: 0,
+          Position: "R" ,
+          Amount: 0
         },
       },
-      ZellenTauschen: {
-        ErsteZelle: {
-          Zeile: undefined,
-          Spalte: undefined,
+  
+      Swap: {
+        Rows: {
+          First: 0,
+          Second:0,
         },
-        ZweiteZelle: {
-          Zeile: undefined,
-          Spalte: undefined,
+        Columns: {
+          First: 0,
+          Second: 0,
+        }
+      },
+  
+      SwapCells: {
+        FirstCell: {
+          Row: 0,
+          Column: 0,
+        },
+        SecondCell: {
+          Row: 0,
+          Column: 0,
         },
       },
-      ZeileTemp: {
-        zeile: [],
-        InsertPositon: undefined,
+      TempRow: {
+        row: [],
+        InsertPosition: 0,
       },
-      SpalteTemp: {
-        spalten: [],
-        InsertPositon: undefined,
-      },
-    },
-
-    // Neue Tabelle erstellen
-    NewTableIsOpen: false,
+  
+      TempColumn: {
+        columns:[],
+        InsertPosition: 0,
+      }
+    }
+  ,
+    
     NewTable: {
-      Error: undefined,
+      IsOpen: false,
+      Error: "",
       TableName: "",
-      AnzahlZeilen: undefined,
-      AnzahlSpalten: undefined,
+      NumberOfRows: 0,
+      NumberOfColumns: 0,
     },
-
-    // Registrieren
-    Registrieren: {
-      Username: undefined,
-      Email: undefined,
-      Passwort: undefined,
-      PasswortWiederholen: undefined,
+  
+    PageSettings: {
+      CurrentPages:[],
+      MaxPageLength: 21,
+      MinPageLength: 1,
+      CellWidth: 77,
+      NumberOfPages: 0,
+      WindowHeight: 0,
+  
+      CurrentPage: {
+        Number: 0,
+        Start: 0,
+        End: 0,
+      }
     },
-    RegistrierenCheck: undefined,
-    // Login
-
-    Anmelden: {
-      Email: "Lorenzo12696@gmail.com",
-      Passwort: "123",
-    },
-    AbmeldenStatus: undefined,
-    AnmeldenCheck: undefined,
-
-    AngemedetBleiben: false,
-    // Seiten
-
-    SeitenVerwenden: {
-      CurrentSeiten: [],
-      SeitenLängeMax: 0,
-      SeitenLängeMin: 0,
-      ZellenWidth: 77,
-      SeitenAnzahl: 0,
-      WindowHeight: useNuxtApp().vueApp._container?.clientWidth,
-
-      CurrentSeite: {
-        Zahl: 1,
-        Start: 1,
-        Ende: undefined,
-      },
-    },
-
+  
     ApiURLs: {
       CurrentUrl: "",
-      BaseUrl: "https://csvdb2.cyclic.app/",
-      BaseUrlLocl: "http://localhost:8080/",
-
-      ApiUrlUsersRegistrieren: "auth/registrieren",
-      ApiUrlUsersAnmelden: "auth/login",
-      ApiUrlUserTablen: undefined,
-      ApiUrlDeletTable: undefined,
+      BaseUrl: "",
+      LocalBaseUrl: "http://localhost:8080",
+      ApiUrlUserSignUp: "auth/registrieren",
+      ApiUrlUserLogin: "auth/login",
+      ApiUrlUserTables: "",
+      ApiUrlDeleteTable: "",
       requestOptions: {
-        withCredentials: true,
+        withCredentials: false,
         baseURL: "",
-      },
-    },
+      }
+    }
   }),
   getters: {
-    name: (state) => state,
-    FirstZeileLength: (state) => state.CurrentTable.TableData.get(1).size,
-    CurrentSeiteStart: (state) => state.SeitenVerwenden.CurrentSeite.Start,
-    CurrentSeiteEnde: (state) => state.SeitenVerwenden.CurrentSeite.Ende,
-    FirstZelleActive: (state) =>
-      state.CurrentTable.TableData.get(1).get(1).Activ,
-    FirstZelleZellenInhalt: (state) =>
-      state.CurrentTable.TableData.get(1).get(1).ZellenInhalt,
-    FirstZeile: (state) => state.CurrentTable.TableData.get(1),
-    CurrentTableLength: (state) => state.CurrentTable.TableData.size,
-    CurrentTableTableData: (state) => state.CurrentTable.TableData,
-    CurrentTablesLength: (state) => state,
+    CurrentPage: (state) => state.PageSettings.CurrentPage,
+    CurrentPageStart: (state) => state.PageSettings.CurrentPage.Start,
+    CurrentPageEnd: (state) => state.PageSettings.CurrentPage.End,
+    FirstRowLength: (state) => state.CurrentTable?.TableData.get(1)?.size,
+    FirstCellActive: (state) =>
+      state.CurrentTable?.TableData.get(1)?.get(1)?.Active,
+    FirstCellCellContent: (state) =>
+      state.CurrentTable?.TableData.get(1)?.get(1)?.CellContent,
+    FirstRow: (state) => state.CurrentTable?.TableData.get(1),
+    CurrentTableLength: (state) => state.CurrentTable?.TableData.size,
+    CurrentTableTableData: (state) => state.CurrentTable?.TableData,
+    CurrentTablesSize: (state) => state.CurrentTables?.size,
   },
   actions: {
-    InitSeitenBerechnen() {
-      this.SetTabelSize()
-      this.BrechneMax()
-      this.SeitenBerechnen()
+    InitPageCalculate() {
+      this.SetTableSize()
+      this.ResizeWindow()
     },
 
-    SetCurrentSeiteFirst() {
-      this.SeitenVerwenden.CurrentSeite = this.SeitenVerwenden.CurrentSeiten[0]
+    SetCurrentPageFirst() {
+      this.PageSettings.CurrentPage = this.PageSettings.CurrentPages[0]
     },
 
-    BrechneMax() {
-      const { WindowHeight, ZellenWidth } = this.SeitenVerwenden
-      this.SeitenVerwenden.SeitenLängeMax = Math.round(
-        (WindowHeight - 200) / ZellenWidth
+    CalculateMax() {
+      const { WindowHeight, CellWidth } = this.PageSettings
+      this.PageSettings.MaxPageLength = Math.round(
+        (WindowHeight - 200) / CellWidth
       )
     },
     ResizeWindow() {
-      this.SeitenVerwenden.WindowHeight =
-        useNuxtApp().vueApp._container?.clientWidth
-      this.BrechneMax()
-      this.SeitenBerechnen()
+      this.PageSettings.WindowHeight =
+        useNuxtApp().vueApp._container?.clientWidth || 0
+      this.CalculateMax()
+      this.CalculatePages()
 
-      const currentPageNumber = this.SeitenVerwenden.CurrentSeite.Zahl - 1
-      this.SeitenVerwenden.CurrentSeite =
-        this.SeitenVerwenden.CurrentSeiten[currentPageNumber]
+      this.PageSettings.CurrentPage =
+        this.PageSettings.CurrentPages[
+          this.PageSettings.CurrentPage.Number - 1
+        ]
+      
     },
-    SeitenBerechnen() {
-      this.SeitenVerwenden.CurrentSeiten = []
-      const seiteErste = new Seite(this.SeitenVerwenden.SeitenLängeMax - 1)
-      this.SeitenVerwenden.CurrentSeiten.push(seiteErste)
-      this.SeitenAnzahl()
+    CalculatePages() {
+      this.PageSettings.CurrentPages= []
+      const MaxPageLength=this.PageSettings.MaxPageLength - 1
+      this.PageSettings.CurrentPages.push(new Page(MaxPageLength))
+      this.calculatePageCount()
 
-      for (let i = 0; i < this.SeitenVerwenden.SeitenAnzahl; i++) {
-        const currentSeite = this.SeitenVerwenden.CurrentSeiten[i]
-        const seite = new Seite(
-          currentSeite.Zahl + 1,
-          currentSeite.Ende + 1,
-          currentSeite.Ende + this.SeitenVerwenden.SeitenLängeMax - 1
+      for (let i = 0; i < this.PageSettings.NumberOfPages; i++) {
+        const currentSeite = this.PageSettings.CurrentPages[i],
+         seite = new Page(
+          currentSeite.End + MaxPageLength,
+          currentSeite.Number + 1,
+          currentSeite.End + 1
         )
 
-        this.SeitenVerwenden.CurrentSeiten.push(seite)
+        this.PageSettings.CurrentPages.push(seite)
       }
     },
-    SeitenAnzahl() {
-      let tabellenBreite = this.TabelenGröße.breite
-      let seitenAnzahl = 1
-
-      while (tabellenBreite >= this.SeitenVerwenden.SeitenLängeMax) {
-        seitenAnzahl++
-        let restlicheBreite =
-          tabellenBreite - this.SeitenVerwenden.SeitenLängeMax
-        tabellenBreite = restlicheBreite
+    calculatePageCount() {
+      let tableWidth = this.TableSize.Width;
+      let pageCount = 1;
+    
+      while (tableWidth >= this.PageSettings.MaxPageLength) {
+        pageCount++;
+        let remainingWidth = tableWidth - this.PageSettings.MaxPageLength;
+        tableWidth = remainingWidth;
       }
-
-      this.SeitenVerwenden.SeitenAnzahl = seitenAnzahl - 1
-    },
+    
+      this.PageSettings.NumberOfPages = pageCount - 1;
+    }
+    ,
     //Seiten wechseln
+PageNav(NavKey:string){
 
-    SeiteZurück() {
-      const currentPageNumber = this.SeitenVerwenden.CurrentSeite.Zahl - 2
-      this.SeitenVerwenden.CurrentSeite =
-        this.SeitenVerwenden.CurrentSeiten[currentPageNumber]
-    },
-    SeiteVor() {
-      const currentPageNumber = this.SeitenVerwenden.CurrentSeite.Zahl
-      this.SeitenVerwenden.CurrentSeite =
-        this.SeitenVerwenden.CurrentSeiten[currentPageNumber]
-    },
-    SeiteFirst() {
-      this.SeitenVerwenden.CurrentSeite = this.SeitenVerwenden.CurrentSeiten[0]
-    },
-    SeiteLast() {
-      const lastPageIndex = this.SeitenVerwenden.CurrentSeiten.length - 1
-      this.SeitenVerwenden.CurrentSeite =
-        this.SeitenVerwenden.CurrentSeiten[lastPageIndex]
-    },
+const NavKeys={
+"GoBack":this.CurrentPage.Number - 2,
+"GoForward":this.CurrentPage.Number,
+"GoFirst":0,
+"GoLast":this.CurrentPage.Number - 1,
+}
+
+
+  this.PageSettings.CurrentPage =
+  this.PageSettings.CurrentPages[
+    NavKeys[NavKey] || 0
+  ]
+},
+
+
     //Create new Table
 
     CreateNewTable() {
-      const { AnzahlSpalten, AnzahlZeilen, TableName } = this.NewTable
+      const { NumberOfColumns, NumberOfRows, TableName } = this.NewTable
 
       if (this.CheckNewTable()) {
-        const NewTable = new Table(TableName)
-        NewTable.GenerateTableData(AnzahlZeilen, AnzahlSpalten)
-        this.CurrentTables.push(NewTable)
-        this.GetSelectTabel(this.CurrentTables.length - 1)
-        this.NewTableIsOpen = false
+        this.CurrenTablesPuhs(
+          new Table({
+            TableName,
+            TableData: GenerateTableData(NumberOfColumns, NumberOfRows),
+          })
+        )
+        this.GetSelectTabel(this.CurrentTablesSize)
+        this.SetAllSectonsFalse()
       }
     },
     CheckNewTable() {
-      const { AnzahlSpalten, AnzahlZeilen, TableName } = this.NewTable
+      const { NumberOfColumns, NumberOfRows, TableName } = this.NewTable
       let CheckOk = false
 
-      const isTableNameTaken = this.CurrentTables.some(
-        (Table) => Table.TableName === TableName
-      )
-
-      const isInvalidColumnCount = AnzahlSpalten <= 0
-      const isInvalidRowCount = AnzahlZeilen <= 0
-
-      if (isTableNameTaken) {
-        this.NewTable.Error = "Dieser Name ist bereits vergeben"
-      } else if (isInvalidColumnCount) {
-        this.NewTable.Error = "Die Anzahl der Spalten ist zu klein"
-      } else if (isInvalidRowCount) {
-        this.NewTable.Error = "Die Anzahl der Zeilen ist zu klein"
-      } else {
-        CheckOk = true
-      }
+      this.CurrentTables.values().some((Table) => Table.TableName === TableName)
+        ? (this.NewTable.Error = "This name is already taken")
+        : NumberOfColumns <= 0
+        ? (this.NewTable.Error = "The number of columns is too small")
+        : NumberOfRows <= 0
+        ? (this.NewTable.Error = "The number of rows is too small")
+        : (CheckOk = true)
 
       return CheckOk
     },
     // Tabelle bearbeiten
 
     // Zellen tauschen
-    ZellenTauschenAufrufen() {
+    CallCellSwap() {
       this.SetAllSectonsFalse()
-      this.TableBearbeiten.Sections.ZellenTauschen = true
+      this.TableEdit.Sections.SwapCells = true
     },
-    CheckZellenTauschen() {
-      const { ErsteZelle, ZweiteZelle } = this.TableBearbeiten.ZellenTauschen
-      const { höhe, breite } = this.TabelenGröße
-      let error = ""
-
-      const sindZellenVorhanden =
-        ErsteZelle.Spalte >= 1 &&
-        ErsteZelle.Zeile >= 1 &&
-        ZweiteZelle.Spalte >= 1 &&
-        ZweiteZelle.Zeile >= 1
-
-      const sindZellenInTabelle =
-        ErsteZelle.Spalte <= höhe &&
-        ErsteZelle.Zeile <= höhe &&
-        ZweiteZelle.Spalte <= breite &&
-        ZweiteZelle.Zeile <= breite
-
-      const sindZellenVerschieden =
-        ErsteZelle.Spalte !== ZweiteZelle.Spalte ||
-        ErsteZelle.Zeile !== ZweiteZelle.Zeile
-
-      if (!sindZellenVorhanden) {
-        error = "Diese Zelle ist nicht vorhanden"
-      } else if (!sindZellenInTabelle) {
-        error = "Diese Zelle befindet sich nicht in der Tabelle"
-      } else if (!sindZellenVerschieden) {
-        error = "Diese Zellen sind identisch"
+    CheckCellsSwap() {
+      const { FirstCell, SecondCell } = this.TableEdit.SwapCells;
+      const { Height, Width } = this.TableSize;
+    
+      if (
+        FirstCell.Column < 1 || FirstCell.Row < 1 || 
+        SecondCell.Column < 1 || SecondCell.Row < 1
+      ) {
+        this.TableEdit.Error = "One or both cells do not exist";
+        return false;
       }
-
-      this.TableBearbeiten.Error = error
-
-      return sindZellenVorhanden && sindZellenInTabelle && sindZellenVerschieden
+    
+      if (
+        FirstCell.Column > Width || FirstCell.Row > Height || 
+        SecondCell.Column > Width || SecondCell.Row > Height
+      ) {
+        this.TableEdit.Error = "One or both cells are outside the table bounds";
+        return false;
+      }
+    
+      if (
+        FirstCell.Column === SecondCell.Column && 
+        FirstCell.Row === SecondCell.Row
+      ) {
+        this.TableEdit.Error = "The cells are identical";
+        return false;
+      }
+    
+      this.TableEdit.Error = "";
+      return true;
     },
+    
 
     ZellenTauschen() {
-      if (this.CheckZellenTauschen()) {
+      if (this.CheckCellsSwap()) {
         this.InitZellenTauschen()
       }
     },
-    InitZellenTauschen() {
-      const { ErsteZelle, ZweiteZelle } = this.TableBearbeiten.ZellenTauschen
-      const ZellenInhaltErste = this.CurrentTableTableData.get(
-        ErsteZelle.Zeile
-      ).get(ErsteZelle.Spalte).ZellenInhalt
-
-      const ZellenInhaltZweite = this.CurrentTableTableData.get(
-        ZweiteZelle.Zeile
-      ).get(ZweiteZelle.Spalte).ZellenInhalt
-
-      this.CurrentTable.TableData.get(ErsteZelle.Zeile).get(
-        ErsteZelle.Spalte
-      ).ZellenInhalt = ZellenInhaltZweite
-
-      this.CurrentTable.TableData.get(ZweiteZelle.Zeile).get(
-        ZweiteZelle.Spalte
-      ).ZellenInhalt = ZellenInhaltErste
-    },
+    initCellsSwap() {
+      const { FirstCell, SecondCell } = this.TableEdit.SwapCells;
+      const table = this.CurrentTable?.TableData;
+      
+      const temp = table?.get(FirstCell.Row)?.get(FirstCell.Column)?.CellContent;
+      table.get(FirstCell.Row)?.get(FirstCell.Column)?.CellContent = table?.get(SecondCell.Row)?.get(SecondCell.Column)?.CellContent;
+      table.get(SecondCell.Row).get(SecondCell.Column)?.CellContent = temp;
+    }
+    
     OpenAside() {
       this.TableBearbeiten.Sections.Aside = !this.TableBearbeiten.Sections.Aside
     },
@@ -632,7 +599,7 @@ export const UseMainStore = defineStore("csv", {
 
       this.CurrentTable.TableData = temp2
     },
-    ZeileLöschen(key) {
+    ZeileLöschen(key: number) {
       let temp = this.CurrentTable.TableData
       temp.delete(key)
 
@@ -646,16 +613,18 @@ export const UseMainStore = defineStore("csv", {
     },
     // Uploade File
 
-    CreateTable(FileName, FileData) {
-      const NewTable = new Table(FileName)
-      NewTable.CreateTableData(FileData)
-
-      this.CurrentTables.push(NewTable)
-      this.GetSelectTabel(this.CurrentTables.length - 1)
+    CreateTable(FileName: "",, FileData: CsvData) {
+      this.CurrenTablesPuhs(
+        new Table({
+          TableName: FileName,
+          TableData: TableDataToMap(CsvDataToTableDataArray(FileData)),
+        })
+      )
+      this.GetSelectTabel(this.CurrentTablesSize)
     },
 
-    async GetFileData(e) {
-      const [File] = await e.target.files
+    async GetFileData(e: Event) {
+      const [File] = await e?.target?.files
 
       const FileName = await File.name.slice(0, -4)
 
@@ -733,126 +702,89 @@ export const UseMainStore = defineStore("csv", {
     },
     SetTabelSize() {
       this.TabelenGröße.höhe = this.CurrentTable.TableData.size
-      this.TabelenGröße.breite = this.CurrentTable.TableData.get(1).size
+      this.TabelenGröße.breite = this.CurrentTable.TableData?.get(1)?.size || 0
     },
-    GetSelectTabel(TableIndex) {
+    async GetSelectTabel(TableIndex: number) {
       this.CurrentTabelleID = TableIndex
 
-      this.CurrentTable = this.CurrentTables[TableIndex]
+      this.CurrentTable = this.CurrentTables?.get(TableIndex)
     },
-    SetCurrentURL(ApiString: string) {
-      this.ApiURLs.CurrentUrl = ApiString
+    async SetCurrentURL(Api"",: "",) {
+      this.ApiURLs.CurrentUrl = Api"",
 
-      this.ApiURLs.ApiUrlUsersAnmelden =
-        ApiString + this.ApiURLs.ApiUrlUsersAnmelden
+      this.ApiURLs.ApiUrlUsersLogin = Api"", + this.ApiURLs.ApiUrlUsersLogin
 
-      this.ApiURLs.ApiUrlUsersRegistrieren =
-        ApiString + this.ApiURLs.ApiUrlUsersRegistrieren
+      this.ApiURLs.ApiUrlUsersSingleUp =
+        Api"", + this.ApiURLs.ApiUrlUsersSingleUp
 
-      this.ApiURLs.requestOptions.baseURL = ApiString
+      this.ApiURLs.requestOptions.baseURL = Api"",
     },
     async SetApiUrlUserTables() {
-      const { _id: userId } = this.UserData
+      const { _id } = this.UserData
       const UserUrl = this.ApiURLs.CurrentUrl + "user/"
-      this.ApiURLs.ApiUrlUserTablen = `${UserUrl}${userId}/tables`
-      this.ApiURLs.ApiUrlDeletTable = `${UserUrl}${userId}/tables/`
+      this.ApiURLs.ApiUrlUserTablen = `${UserUrl}${_id}/tables`
+      this.ApiURLs.ApiUrlDeletTable = `${UserUrl}${_id}/tables/`
+    },
+
+    async SetUserdata(data: { Username: "",; _id: "", }) {
+      this.UserData.Username = data.Username
+      this.UserData._id = data._id
     },
     async Abmelden() {
       localStorage.clear()
     },
-    async CheckLogin() {
-      const sessionStorageData = sessionStorage.getItem("Csv")
-      const localStorageData = localStorage.getItem("Csv")
 
-      if (sessionStorageData) {
-        const AnmeldeData = await JSON.parse(sessionStorageData)
-        this.Anmelden = AnmeldeData
-        await this.mAnmelden()
-      } else if (localStorageData) {
-        const AnmeldeData = await JSON.parse(localStorageData)
-        this.Anmelden = AnmeldeData
-        this.AngemedetBleiben = true
-        await this.mAnmelden()
-      }
-    },
-    //Anmelden
-    async mAnmelden() {
-      try {
-        const res = await axios.post(
-          this.ApiURLs.ApiUrlUsersAnmelden,
-          this.Anmelden,
-          this.ApiURLs.requestOptions
-        )
-
-        if (res.status === 202) {
-          this.AnmeldenCheck = res.data
-          this.AbmeldenStatus = 202
-        } else if (res.status === 201) {
-          this.UserData = {
-            Username: res.data.Username,
-            _id: res.data._id,
-          }
-
-          const dataAnmelden = JSON.stringify(this.Anmelden)
-
-          if (this.AngemedetBleiben) {
-            localStorage.setItem("Csv", dataAnmelden)
-          } else {
-            sessionStorage.setItem("Csv", dataAnmelden)
-          }
-
-          this.AbmeldenStatus = 201
-        }
-      } catch (error) {
-        console.error(error.message)
-      }
-    },
-    // Registrieren
-
-    async mRegistrieren() {
-      try {
-        if (
-          this.Registrieren.Passwort !== this.Registrieren.PasswortWiederholen
-        ) {
-          this.RegistrierenCheck = "Passwörter sind nicht identisch"
-        } else {
-          const { PasswortWiederholen, ...UserData } = this.Registrieren
-
-          const res = await axios.post(
-            this.ApiURLs.ApiUrlUsersRegistrieren,
-            UserData
+    async PrepareTableToStore(SendTables: SendTables) {
+      SendTables.forEach(
+        ({
+          CurrentZelle,
+          LastZelle,
+          TableName,
+          TableData,
+        }: table<TableDataArray>) => {
+          this.CurrenTablesPuhs(
+            new Table({
+              CurrentZelle,
+              LastZelle,
+              TableName,
+              TableData: TableDataToMap(TableData),
+            })
           )
-
-          if (res.status === 202) {
-            this.RegistrierenCheck = res.data
-          } else if (res.status === 201) {
-            route.push({ path: "/Login" })
-          }
         }
-      } catch (error) {
-        console.error(error.message)
-      }
+      )
     },
+    async CurrenTablesPuhs(Table: table<TableDataMap>) {
+      this.CurrentTables.set(this.CurrentTablesSize + 1, Table)
+    },
+    PrepareTableToSend(CurrentTables: CurrentTables): SendTables {
+      return CurrentTables.map((CurrentTable) => {
+        const table = new Table({
+          ...CurrentTable,
+        })
+        table.TableDataToArray()
+        return table
+      })
+    },
+
     // Requests
 
     async GetTables() {
       try {
-        const res = await axios.get(
+        const { data } = await axios.get(
           this.ApiURLs.ApiUrlUserTablen,
           this.ApiURLs.requestOptions
         )
 
-        const sendTables = res.data
+        await this.PrepareTableToStore(data)
 
-        this.CurrentTables = Table.PrepareTableToStore(sendTables)
-        this.GetSelectTabel(0)
-      } catch (error) {
-        console.error(error.message)
+        await this.GetSelectTabel(1)
+      } catch (er) {
+        console.log(er)
       }
     },
     async SaveTables() {
       try {
-        const sendTables = Table.PrepareTableToSend(this.CurrentTables)
+        const sendTables = this.PrepareTableToSend(this.CurrentTables)
 
         const res = await axios.patch(
           this.ApiURLs.ApiUrlUserTablen,
@@ -867,7 +799,7 @@ export const UseMainStore = defineStore("csv", {
         console.error(error.message)
       }
     },
-    async DeleteTable(tableID: string) {
+    async DeleteTable(tableID: "",) {
       try {
         const res = await axios.delete(
           `${this.ApiURLs.ApiUrlDeletTable}${tableID}`,
@@ -883,3 +815,5 @@ export const UseMainStore = defineStore("csv", {
     },
   },
 })
+initStore()
+export const MainStore = UseMainStore()

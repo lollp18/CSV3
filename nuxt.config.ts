@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["./stores", "./helper"],
   },
+
   hooks: {
     "pages:extend"(pages) {
       // add a route
@@ -19,6 +20,9 @@ export default defineNuxtConfig({
       })
     },
   },
+  typescript: {
+    typeCheck: true,
+  },
   css: ["~/assets/style/main.sass"],
 
   postcss: {
@@ -28,8 +32,5 @@ export default defineNuxtConfig({
     },
   },
 
-  typescript: {
-    typeCheck: true,
-  },
-  devtools: { enabled: true },
+  compatibilityDate: "2024-08-12",
 })

@@ -1,67 +1,64 @@
-<script setup>
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 
 <template>
   <footer>
     <div class="auswahl-container">
       <div
         class="auswahl-containerItem"
-        v-for="({ TableName }, TableIndex) in store.CurrentTables"
+        v-for="([i, { TableName }], TableIndex) in MainStore.CurrentTables"
         :key="TableIndex">
-        <button @click="store.GetSelectTabel(TableIndex)">
+        <button @click="MainStore.GetSelectTabel(TableIndex)">
           {{ TableName }}
         </button>
         <button
           class="BtnDeletTable"
-          @click="store.DeleteTable(TableIndex)">
+          @click="MainStore.DeleteTable(TableIndex)">
           <ion-icon name="close-outline"></ion-icon>
         </button>
         <a
           class="BtnDownload"
-          @click="store.mDownlodFile(TableIndex)"
-          :href="store.DownloadFileHref"
+          @click="MainStore.mDownlodFile(TableIndex)"
+          :href="MainStore.DownloadFileHref"
           :download="TableName">
           <ion-icon name="download-outline"></ion-icon>
         </a>
       </div>
       <button
         class="btn"
-        @click="store.NewTableIsOpen = true">
+        @click="MainStore.NewTableIsOpen = true">
         <ion-icon name="add-outline"></ion-icon>
       </button>
     </div>
     <div class="seiten-rapper">
       <button
-        v-if="store.SeitenVerwenden.CurrentSeite.Zahl > 1"
+        v-if="MainStore.SeitenVerwenden.CurrentSeite.Zahl > 1"
         class="btn-seiten-FL"
-        @click="store.SeiteFirst()">
+        @click="MainStore.SeiteFirst()">
         First
       </button>
       <button
-        v-if="store.SeitenVerwenden.CurrentSeite.Zahl > 1"
+        v-if="MainStore.SeitenVerwenden.CurrentSeite.Zahl > 1"
         class="btn-seiten"
-        @click="store.SeiteZurück()">
+        @click="MainStore.SeiteZurück()">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </button>
       <button class="zahl">
-        {{ store.SeitenVerwenden.CurrentSeite.Zahl }}
+        {{ MainStore.SeitenVerwenden.CurrentSeite.Zahl }}
       </button>
       <button
         v-if="
-          store.SeitenVerwenden.CurrentSeite.Zahl <=
-          store.SeitenVerwenden.CurrentSeiten.length - 1
+          MainStore.SeitenVerwenden.CurrentSeite.Zahl <=
+          MainStore.SeitenVerwenden.CurrentSeiten.length - 1
         "
-        @click="store.SeiteVor()">
+        @click="MainStore.SeiteVor()">
         <ion-icon name="chevron-forward-outline"></ion-icon>
       </button>
       <button
         v-if="
-          store.SeitenVerwenden.CurrentSeite.Zahl <=
-          store.SeitenVerwenden.CurrentSeiten.length - 1
+          MainStore.SeitenVerwenden.CurrentSeite.Zahl <=
+          MainStore.SeitenVerwenden.CurrentSeiten.length - 1
         "
-        @click="store.SeiteLast()">
+        @click="MainStore.SeiteLast()">
         Last
       </button>
     </div>

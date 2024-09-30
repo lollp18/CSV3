@@ -1,156 +1,123 @@
-
-
-export type NumberUndefined = number | undefined
-export type StringUndefined = string | undefined
 export type ArrayNever = Array<never>
 
-export interface Zelle {
-  Activ: Boolean
-  ZellenInhalt: string
+export type Cell = {
+  Active: boolean
+  CellContent: string
 }
 
-export const Zelle = class {
-  Activ: Boolean = false
-  ZellenInhalt: string
-  constructor(ZellenInhalt: string = "") {
-    this.ZellenInhalt = ZellenInhalt.trim()
+export const Cell = class {
+  Active = false
+  CellContent: string
+
+  constructor(CellContent = "") {
+    this.CellContent = CellContent.trim()
   }
 }
 
-export type TableDataMap = Map<number, Map<number, Zelle>>
-export type TableDataArray = Array<Array<Zelle>>
+export type TableDataMap = Map<number, Map<number, Cell>>
+export type TableDataArray = [[number, [[number, Cell]]]]
 export type TableData = TableDataMap | TableDataArray
-export type parsCsvDatei = Array<Array<string>>
-export type Zeile = Map<Number, Zelle>
-export type CurrentTable = Table<TableDataMap>
-export type CurrentTables = Array<Table<TableDataMap>>
-export type SendTables = Array<Table<TableDataArray>>
+export type CsvData = Array<Array<string>>
+export type Row = Map<number, Cell>
+export type CurrentTable = TableType<TableDataMap>
+export type CurrentTables = Map<number, TableType<TableDataMap>>
+export type SendTables = Map<number, TableType<TableDataArray>>
 
-export interface LastCurrentZelle {
-  Zeile: number
-  Spalte: number
-  ZellenInhalt: string
-  Activ: Boolean
+export interface LastCurrentCell {
+  Row: number
+  Column: number
+  CellContent: string
+  Active: boolean
 }
 
-export interface Table<TableDataType> {
-  LastZelle: LastCurrentZelle
-  CurrentZelle: LastCurrentZelle
+export interface TableType<TableDataType> {
+  LastCell: LastCurrentCell
+  CurrentCell: LastCurrentCell
   TableName: string
   TableData: TableDataType
 }
 
-export const Table = class {
-  private LastZelle: LastCurrentZelle
-  private CurrentZelle: LastCurrentZelle
-  private TableName: string
-  private TableData: TableData
+const LastCurrentCell = {
+  Row: 0,
+  Column: 0,
+  CellContent: "",
+  Active: false,
+}
 
-  constructor(TableName: string) {
-    this.CurrentZelle = {
-      Zeile: 0,
-      Spalte: 0,
-      ZellenInhalt: "",
-      Activ: false,
-    }
+export class Table {
+  LastCell: LastCurrentCell
+  CurrentCell: LastCurrentCell
+  TableName: string
+  TableData: TableDataMap
 
-    this.LastZelle = {
-      Zeile: 0,
-      Spalte: 0,
-      ZellenInhalt: "",
-      Activ: false,
-    }
-
+  constructor({
+    CurrentCell = LastCurrentCell,
+    LastCell = LastCurrentCell,
+    TableName,
+    TableData,
+  }: TableType<TableDataMap>) {
+    this.CurrentCell = CurrentCell
+    this.LastCell = LastCell
     this.TableName = TableName
-    this.TableData = new Map()
-  }
-  static PrepareTableToStore(
-    SendTables: Array<Table<TableDataArray>>
-  ): CurrentTables {
-    const CurrentTables: CurrentTables = []
-
-    SendTables.forEach(({ TableName, TableData, LastZelle, CurrentZelle }) => {
-      const CurrentTable = new Table(TableName)
-      CurrentTable.TableDataToMap(TableData)
-      CurrentTable.SetLastUndCurrentZelle(LastZelle, CurrentZelle)
-      CurrentTables.push(CurrentTable)
-    })
-    return CurrentTables
-  }
-  static PrepareTableToSend(
-    CurrentTables: CurrentTables
-  ): Array<Table<TableDataArray>> {
-    const SendTables: SendTables = []
-    CurrentTables.forEach(
-      ({ TableName, TableData, LastZelle, CurrentZelle }) => {
-        const SendTable = new Table(TableName)
-        SendTable.TableDataToArray(TableData)
-        SendTable.SetLastUndCurrentZelle(LastZelle, CurrentZelle)
-        SendTables.push(SendTable)
-      }
-    )
-    return SendTables
+    this.TableData = TableData
   }
 
-  SetLastUndCurrentZelle(
-    LastZelle: LastCurrentZelle,
-    CurrentZelle: LastCurrentZelle
+  SetLastAndCurrentCell(
+    LastCell: LastCurrentCell,
+    CurrentCell: LastCurrentCell
   ) {
-    this.LastZelle = LastZelle
-    this.CurrentZelle = CurrentZelle
+    this.LastCell = LastCell
+    this.CurrentCell = CurrentCell
   }
 
-  CreateTableData(NewTableData: parsCsvDatei) {
-    NewTableData.forEach((Zeile, ZeileIndex) => {
-      const NewZeile: Zeile = new Map()
-      this.TableData.set(ZeileIndex + 1, NewZeile)
-      Zeile.forEach((ZelleValue, ZelleIndex) => {
-        NewZeile.set(ZelleIndex + 1, new Zelle(ZelleValue))
+  CreateTableData(NewTableData: CsvData) {
+    NewTableData.forEach((RowData, RowIndex) => {
+      const NewRow: Row = new Map()
+      this.TableData.set(RowIndex + 1, NewRow)
+      RowData.forEach((CellValue, CellIndex) => {
+        NewRow.set(CellIndex + 1, new Cell(CellValue))
       })
-    })
-  }
-  GenerateTableData(AnzahlZeilen: number, AnzahlSpalten: number) {
-    const Zeile: Array<string> = Array(Number(AnzahlZeilen)).fill("")
-
-    const NewTableData: Array<Array<string>> = Array(
-      Number(AnzahlSpalten)
-    ).fill(Zeile)
-    this.CreateTableData(NewTableData)
-  }
-
-  TableDataToMap(TableData: TableDataArray) {
-    TableData.forEach((Zeile, ZeileIndex) => {
-      const NewZeile = new Map()
-      this.TableData.set(ZeileIndex + 1, NewZeile)
-      Zeile.forEach((Zelle, ZelleIndex) => {
-        NewZeile.set(ZelleIndex + 1, Zelle)
-      })
-    })
-  }
-
-  TableDataToArray(TableData: TableDataMap) {
-    this.TableData = []
-    TableData.forEach((Zeile) => {
-      this.TableData.push(Array.from(Zeile).map(([name, value]) => value))
     })
   }
 }
 
-export type ArraySeite = Array<Seite>
-export type Seite = {
-  Zahl: number
+export const GenerateTableData = (NumberRows: number, NumberColumns: number) =>
+  TableDataToMap(
+    CsvDataToTableDataArray(
+      Array.from({ length: NumberRows }, () =>
+        Array.from({ length: NumberColumns }, () => "")
+      )
+    )
+  )
+
+export const CsvDataToTableDataArray = (CsvData: CsvData): TableDataArray =>
+  CsvData.map((RowData, RowIndex) => [
+    RowIndex + 1,
+    RowData.map((CellValue, CellIndex) => [CellIndex + 1, new Cell(CellValue)]),
+  ])
+
+export const TableDataToMap = (TableData: TableDataArray) =>
+  new Map(TableData.map(([RowIndex, Cells]) => [RowIndex, new Map(Cells)]))
+
+export function TableDataToArray(TableData: TableDataMap): TableDataArray {
+  return TableData.map((Row) => Array.from(Row).map(([name, value]) => value))
+}
+
+export type ArrayPage = Array<Page>
+export type Page = {
+  Number: number
   Start: number
-  Ende: number
+  End: number
 }
 
-export const Seite = class {
-  private Zahl: number
-  private Start: number
-  private Ende: number
+export const Page = class {
+  Number: number
+  Start: number
+  End: number
 
-  constructor(Ende: number, Zahl: number = 1, Start: number = 1) {
-    this.Zahl = Zahl
+  constructor(End: number, Number: number = 1, Start: number = 1) {
+    this.Number = Number
     this.Start = Start
-    this.Ende = Ende
+    this.End = End
   }
 }

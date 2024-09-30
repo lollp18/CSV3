@@ -1,11 +1,16 @@
-<script setup lang="ts">
+<script setup>
 useHead({
   title: "CSV",
-})
-
-const store = UseMainStore()
-onBeforeMount(() => {
-  store.SetCurrentURL(store.ApiURLs.BaseUrlLocl)
+  script: [
+    {
+      type: "module",
+      src: "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js",
+    },
+    {
+      nomodule: true,
+      src: "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js",
+    },
+  ],
 })
 </script>
 
@@ -15,6 +20,11 @@ onBeforeMount(() => {
 <style lang="sass">
 /* --- Global Styls --- */
 @import "./assets/style/main.sass"
+.error-message
+  display: flex
+  justify-content: center
+  font-size: 1.6rem
+  color: red
 
 [name="close-outline"]
   color: $InvalideCloseColor

@@ -1,28 +1,28 @@
 <script setup>
-const store = UseMainStore()
+definePageMeta({
+  middleware: "auth",
+})
 
 onBeforeMount(async () => {
-  await store.CheckLogin()
-  await store.SetApiUrlUserTables()
-  await store.GetTables()
+  await nextTick(async () => {})
+  await MainStore.SetApiUrlUserTables()
 })
 
 onUpdated(() => {
   nextTick(() => {
-    store.SaveTables()
-    store.InitSeitenBerechnen()
-    store.SetCurrentSeiteFirst()
+    MainStore.InitSeitenBerechnen()
+    MainStore.SetCurrentSeiteFirst()
   })
 })
 
 onMounted(() => {
   nextTick(() => {
-    store.InitSeitenBerechnen()
-    store.SetCurrentSeiteFirst()
+    MainStore.InitSeitenBerechnen()
+    MainStore.SetCurrentSeiteFirst()
+  })
 
-    window.addEventListener("resize", () => {
-      store.ResizeWindow()
-    })
+  window.addEventListener("resize", () => {
+    MainStore.ResizeWindow()
   })
 })
 
@@ -32,14 +32,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <Bearbeiten v-if="store.TableBearbeitenOpen" />
-  <NewTable v-if="store.NewTableIsOpen" />
+  <Bearbeiten v-if="MainStore.TableBearbeitenOpen" />
+  <NewTable v-if="MainStore.NewTableIsOpen" />
 
   <Header />
-  <NoTable v-if="store.CurrentTables.length == 0" />
+  <NoTable v-if="MainStore.CurrentTablesSize === 0" />
 
-  <Table v-if="store.CurrentTables.length >= 1" />
-  <Footer v-if="store.CurrentTables.length >= 1" />
+  <Table v-if="MainStore.CurrentTablesSize >= 1" />
+  <Footer v-if="MainStore.CurrentTablesSize >= 1" />
 </template>
 
 <style scoped lang="sass">

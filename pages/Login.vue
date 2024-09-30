@@ -1,78 +1,31 @@
 <script setup>
-const store = UseMainStore()
+onBeforeMount(async () => {
+  await MainStore.SetCurrentURL(MainStore.ApiURLs.BaseUrlLocl)
+})
 </script>
 
 <template>
-  <div class="FormWrapper">
-    <form>
-      <span class="error-message">
-        {{ store.AnmeldenCheck }}
-      </span>
+  <AuthForm>
+    <template #error>{{ AuthStore.LoginCheck }}</template>
+    <template #main>
       <input
-        class="new-Table-input"
-        v-model="store.Anmelden.Email"
+        v-model="AuthStore.LoginData.Email"
         placeholder="Email" />
       <input
-        class="new-Table-input"
-        v-model="store.Anmelden.Passwort"
+        v-model="AuthStore.LoginData.Password"
         placeholder="Passwort" />
 
       <NuxtLink
-        @click="store.mAnmelden()"
         to="/Csv"
-        class="router-link btn">
-        Anmelden
+        class="router-link">
+        Login
       </NuxtLink>
 
       <NuxtLink
-        to="/Registrieren"
-        class="router-link btn">
-        Registrieren
+        to="/SingleUp"
+        class="router-link">
+        SingleUp
       </NuxtLink>
-
-      <input
-        class="checkbox"
-        v-model="store.AngemedetBleiben"
-        type="checkbox" />
-    </form>
-  </div>
+    </template>
+  </AuthForm>
 </template>
-
-<style scoped lang="sass">
-@import "../assets/style/main.sass"
-
-.FormWrapper
-  @include Center
-  width: 100%
-  height: 100%
-
-form
-  @include Center()
-  @include DreiD()
-  flex-direction: column
-  background-color: $MainColor
-  gap: 3rem
-  padding: 4rem 4rem
-  height: 40rem
-  width: 50rem
-  border-radius: 10px
-  font-size: 1.8rem
-
-.error-message
-  display: flex
-  justify-content: center
-  font-size: 1.6rem
-  color: red
-
-
-
-
-button,.router-link,input
-  @include Button()
-
-  font-size: 1.8rem
-  text-decoration: none
-
-.checkbox
-  width: 2rem
-</style>

@@ -1,137 +1,143 @@
-export type state = {
-  UserData:
-    | {
-        Username: string
-        _id: string
-      }
-    | undefined
+export type StateMainStore = {
+  UserData: {
+    Username: string
+    _id: string
+  }
 
-  CurrentTable: CurrentTable | undefined
+  CurrentTable?: CurrentTable
 
-  CurrentTables: CurrentTables | ArrayNever
+  CurrentTables: CurrentTables
 
-  CurrentTabelleID: NumberUndefined
+  CurrentTableId: number
 
-  TabelenGröße: {
-    höhe: number
-    breite: number
+  TableSize: {
+    Height: number
+    Width: number
   }
 
   ConfirmationWindow: {
-    ConfirmationWindowOpen: Boolean
+    IsOpen: boolean
     Text: string
   }
 
   DownloadFileHref: string
 
-  TableBearbeitenOpen: Boolean
-  TableBearbeiten: {
-    Error: StringUndefined
+  TableEdit: {
+    IsOpen: boolean
+    Error: string
 
     Sections: {
-      ZeileEinfügen: Boolean
-      SpalteEinfügen: Boolean
-      ZeileTauschen: Boolean
-      SpalteTauschen: Boolean
-      ZellenTauschen: Boolean
-      Aside: Boolean
+      InsertRow: boolean
+      InsertColumn: boolean
+      SwapRows: boolean
+      SwapColumns: boolean
+      SwapCells: boolean
+      Navigation: boolean
     }
 
-    Einfügen: {
-      Zeilen: {
-        Zeile: NumberUndefined
-        Position: "Über" | "Unter"
-        Anzahl: NumberUndefined
+    Insert: {
+      Rows: {
+        Row: number
+        Position: "Above" | "Below"
+        Amount: number
       }
-      Spalten: {
-        Spalte: NumberUndefined
+      Columns: {
+        Column: number
         Position: "R" | "L"
-        Anzahl: NumberUndefined
+        Amount: number
       }
     }
 
-    Tauschen: {
-      Zeilen: {
-        Erste: NumberUndefined
-        Zweite: NumberUndefined
+    Swap: {
+      Rows: {
+        First: number
+        Second: number
       }
-      Spalten: {
-        Erste: NumberUndefined
-        Zweite: NumberUndefined
-      }
-    }
-    ZellenTauschen: {
-      ErsteZelle: {
-        Zeile: NumberUndefined
-        Spalte: NumberUndefined
-      }
-      ZweiteZelle: {
-        Zeile: NumberUndefined
-        Spalte: NumberUndefined
+      Columns: {
+        First: number
+        Second: number
       }
     }
-    ZeileTemp: {
-      zeile: ArrayNever
-      InsertPositon: NumberUndefined
+
+    SwapCells: {
+      FirstCell: {
+        Row: number
+        Column: number
+      }
+      SecondCell: {
+        Row: number
+        Column: number
+      }
     }
-    SpalteTemp: {
-      spalten: ArrayNever
-      InsertPositon: NumberUndefined
+
+    TempRow: {
+      row: ArrayNever
+      InsertPosition: number
+    }
+
+    TempColumn: {
+      columns: ArrayNever
+      InsertPosition: number
     }
   }
-
-  NewTableIsOpen: Boolean
 
   NewTable: {
-    Error: StringUndefined
+    IsOpen: boolean
+    Error: string
     TableName: string
-    AnzahlZeilen: NumberUndefined
-    AnzahlSpalten: NumberUndefined
+    NumberOfRows: number
+    NumberOfColumns: number
   }
 
-  Registrieren: {
-    Username: StringUndefined
-    Email: StringUndefined
-    Passwort: StringUndefined
-    PasswortWiederholen: StringUndefined
-  }
-
-  RegistrierenCheck: StringUndefined
-
-  Anmelden: {
-    Email: string
-    Passwort: string
-  }
-  AbmeldenStatus: NumberUndefined
-  AnmeldenCheck: StringUndefined
-
-  AngemedetBleiben: Boolean
-  SeitenVerwenden: {
-    CurrentSeiten: ArraySeite | ArrayNever
-    SeitenLängeMax: number
-    SeitenLängeMin: number
-    ZellenWidth: number
-    SeitenAnzahl: number
+  PageSettings: {
+    CurrentPages: ArrayPage
+    MaxPageLength: number
+    MinPageLength: number
+    CellWidth: number
+    NumberOfPages: number
     WindowHeight: number
 
-    CurrentSeite: {
-      Zahl: number
+    CurrentPage: {
+      Number: number
       Start: number
-      Ende: NumberUndefined
+      End: number
     }
   }
 
   ApiURLs: {
     CurrentUrl: string
     BaseUrl: string
-    BaseUrlLocl: string
-    ApiUrlUsersRegistrieren: string
-    ApiUrlUsersAnmelden: string
-    ApiUrlUserTablen: StringUndefined
-    ApiUrlDeletTable: StringUndefined
+    LocalBaseUrl: string
+    ApiUrlUserSignUp: string
+    ApiUrlUserLogin: string
+    ApiUrlUserTables: string
+    ApiUrlDeleteTable: string
     requestOptions: {
       withCredentials: boolean
       baseURL: string
     }
   }
+}
+
+export type LoginData = {
+  Email: string
+  Password: string
+}
+
+export type StateAuthStore = {
+  StorageData: LoginData
+  SignUpData: {
+    Username: string
+    Email: string
+    Password: string
+    PasswordRepeat: string
+  }
+
+  SignUpCheck: string
+
+  LoginData: LoginData
+  LogoutStatus: number
+  LoginCheck: string
+
+  StayConnected: boolean
 }

@@ -1,8 +1,4 @@
-<script setup>
-
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 
 <template>
   <header>
@@ -10,35 +6,29 @@ const store = UseMainStore()
       <input
         class="file-upload"
         type="file"
-        @change="store.GetFileData"
+        @change="MainStore.GetFileData"
         accept=".csv" />
       <button
-        v-if="store.CurrentTables.length >= 1"
-        @click="store.TableBearbeitenOpen = true">
+        v-if="MainStore.CurrentTablesSize >= 1"
+        @click="MainStore.TableBearbeitenOpen = true">
         <ion-icon name="pencil-outline"></ion-icon>
-      </button>
-
-      <button
-        v-show="store.ShowLogoutBTN"
-        @click="store.Abmelden">
-        Abmelden
       </button>
     </nav>
 
     <div
       class="tabel-info"
-      v-if="store.CurrentTables.length >= 1">
+      v-if="MainStore.CurrentTablesSize >= 1">
       <input
-        @input="store.SetCurrentTabelName()"
+        @input="MainStore.SetCurrentTabelName()"
         class="tabel-name"
         placeholder="Tablename"
-        v-model="store.CurrentTable.TableName" />
+        v-model="MainStore.CurrentTable.TableName" />
       <input
         class="zellen-inhalt"
         placeholder="Zelleninhalt"
         type="text"
-        @input="store.SetZellenValue()"
-        v-model="store.CurrentTable.CurrentZelle.ZellenInhalt" />
+        @input="MainStore.SetZellenValue()"
+        v-model="MainStore.CurrentTable.CurrentZelle.ZellenInhalt" />
 
       <input placeholder="" />
     </div>
