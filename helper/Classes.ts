@@ -1,11 +1,11 @@
 export type ArrayNever = Array<never>
 
-export type Cell = {
+export type TypeCell = {
   Active: boolean
   CellContent: string
 }
 
-export const Cell = class {
+export class Cell {
   Active = false
   CellContent: string
 
@@ -14,11 +14,11 @@ export const Cell = class {
   }
 }
 
-export type TableDataMap = Map<number, Map<number, Cell>>
-export type TableDataArray = [[number, [[number, Cell]]]]
+export type TableDataMap = Map<number, Map<number, TypeCell>>
+export type TableDataArray = [[number, [[number, TypeCell]]]]
 export type TableData = TableDataMap | TableDataArray
 export type CsvData = Array<Array<string>>
-export type Row = Map<number, Cell>
+export type Row = Map<number, TypeCell>
 export type CurrentTable = TableType<TableDataMap>
 export type CurrentTables = Map<number, TableType<TableDataMap>>
 export type SendTables = Map<number, TableType<TableDataArray>>
@@ -79,28 +79,6 @@ export class Table {
       })
     })
   }
-}
-
-export const GenerateTableData = (NumberRows: number, NumberColumns: number) =>
-  TableDataToMap(
-    CsvDataToTableDataArray(
-      Array.from({ length: NumberRows }, () =>
-        Array.from({ length: NumberColumns }, () => "")
-      )
-    )
-  )
-
-export const CsvDataToTableDataArray = (CsvData: CsvData): TableDataArray =>
-  CsvData.map((RowData, RowIndex) => [
-    RowIndex + 1,
-    RowData.map((CellValue, CellIndex) => [CellIndex + 1, new Cell(CellValue)]),
-  ])
-
-export const TableDataToMap = (TableData: TableDataArray) =>
-  new Map(TableData.map(([RowIndex, Cells]) => [RowIndex, new Map(Cells)]))
-
-export function TableDataToArray(TableData: TableDataMap): TableDataArray {
-  return TableData.map((Row) => Array.from(Row).map(([name, value]) => value))
 }
 
 export type ArrayPage = Array<Page>

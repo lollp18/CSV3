@@ -16,7 +16,7 @@ export default {
   methods: {
     dragMouseDown(event) {
       event.preventDefault()
-      // get the mouse cursor position at startup:
+
       this.positions.clientX = event.clientX
       this.positions.clientY = event.clientY
       document.onmousemove = this.elementDrag
@@ -28,7 +28,7 @@ export default {
       this.positions.movementY = this.positions.clientY - event.clientY
       this.positions.clientX = event.clientX
       this.positions.clientY = event.clientY
-      // set the element's new position:
+
       this.$refs.draggableContainer.style.top =
         this.$refs.draggableContainer.offsetTop -
         this.positions.movementY +
@@ -57,42 +57,23 @@ export default {
           <button @mousedown="dragMouseDown">
             <ion-icon name="hand-right-outline"></ion-icon>
           </button>
-          <button @click="store.OpenAside()">
+          <button @click="TableEditStore.ToggelNavigation()">
             <ion-icon name="ellipsis-vertical-outline"></ion-icon>
           </button>
         </div>
 
         <button
           class="btnclose"
-          @click="store.TableBearbeitenOpen = false">
-          <ion-icon name="close-outline"></ion-icon></button
-      ></slot>
+          @click="TableEditStore.IsOpen = false">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </slot>
     </div>
     <slot name="main">
       <div class="menü-rapper">
-        <aside v-if="store.TableBearbeiten.Sections.Aside">
-          <button @click="store.ZeilenEinfügenAufrufen()">
-            Zeilen Einfügen
-          </button>
-          <button @click="store.SpaltenEinfügenAufrufen()">
-            Spalten Einfügen
-          </button>
-          <button @click="store.ZeilenTauschenAufrufen()">
-            Zeilen Tauschen
-          </button>
-          <button @click="store.SpaltenTauschenAufrufen()">
-            Spalte Tauschen
-          </button>
-          <button @click="store.ZellenTauschenAufrufen()">
-            Zellen Tauschen
-          </button>
-        </aside>
+        <TableEditNavigation />
 
-        <SpaltenEinfügen v-if="store.TableBearbeiten.Sections.SpalteEinfügen" />
-        <SpalteTauschen v-if="store.TableBearbeiten.Sections.SpalteTauschen" />
-        <ZeilenEinfügen v-if="store.TableBearbeiten.Sections.ZeileEinfügen" />
-        <ZeilenTauschen v-if="store.TableBearbeiten.Sections.ZeileTauschen" />
-        <ZellenTauschen v-if="store.TableBearbeiten.Sections.ZellenTauschen" />
+        <component :is="TableEditStore.Sections.CurrentSection" />
       </div>
     </slot>
     <slot name="footer"></slot>
@@ -118,11 +99,7 @@ export default {
 .menürapper
   position: relative
 
-aside
-  @include FelxColum()
-  gap: 1.5rem
-  padding: 1rem
-  position: absolute
+
 
 .draggable-header
   display: flex

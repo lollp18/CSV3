@@ -1,6 +1,6 @@
 import { useStorage } from "@vueuse/core"
 
-export const UseAuthStore = defineStore("AuthStore", {
+const Store = defineStore("AuthStore", {
   state: (): StateAuthStore => ({
     StorageData: undefined,
 
@@ -27,7 +27,7 @@ export const UseAuthStore = defineStore("AuthStore", {
       if ((sessionStorage || localStorage).length > 0) {
         this.LoginData = this.StorageData
         this.StayConnected = sessionStorage.length > 0 ? false : true
-        await MainStore.SetCurrentURL(MainStore.ApiURLs.BaseUrlLocl)
+        await MainStore.SetCurrentURL(MainStore.ApiURLs.LocalBaseUrl)
         await this.Login()
       }
     },
@@ -35,7 +35,7 @@ export const UseAuthStore = defineStore("AuthStore", {
     async Login() {
       try {
         const { data, status } = await axios.post(
-          MainStore.ApiURLs.ApiUrlUsersLogin,
+          MainStore.ApiURLs.ApiUrlUserLogin,
           this.LoginData,
           MainStore.ApiURLs.requestOptions
         )
@@ -86,5 +86,6 @@ export const UseAuthStore = defineStore("AuthStore", {
     },
   },
 })
-initStore()
-export const AuthStore = UseAuthStore()
+InitStore()
+
+export const AuthStore = Store()

@@ -32,6 +32,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+ 
   <Bearbeiten v-if="MainStore.TableBearbeitenOpen" />
   <NewTable v-if="MainStore.NewTableIsOpen" />
 

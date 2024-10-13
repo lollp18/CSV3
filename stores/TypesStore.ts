@@ -4,7 +4,7 @@ export type StateMainStore = {
     _id: string
   }
 
-  CurrentTable?: CurrentTable
+  CurrentTable: CurrentTable
 
   CurrentTables: CurrentTables
 
@@ -21,65 +21,6 @@ export type StateMainStore = {
   }
 
   DownloadFileHref: string
-
-  TableEdit: {
-    IsOpen: boolean
-    Error: string
-
-    Sections: {
-      InsertRow: boolean
-      InsertColumn: boolean
-      SwapRows: boolean
-      SwapColumns: boolean
-      SwapCells: boolean
-      Navigation: boolean
-    }
-
-    Insert: {
-      Rows: {
-        Row: number
-        Position: "Above" | "Below"
-        Amount: number
-      }
-      Columns: {
-        Column: number
-        Position: "R" | "L"
-        Amount: number
-      }
-    }
-
-    Swap: {
-      Rows: {
-        First: number
-        Second: number
-      }
-      Columns: {
-        First: number
-        Second: number
-      }
-    }
-
-    SwapCells: {
-      FirstCell: {
-        Row: number
-        Column: number
-      }
-      SecondCell: {
-        Row: number
-        Column: number
-      }
-    }
-
-    TempRow: {
-      row: ArrayNever
-      InsertPosition: number
-    }
-
-    TempColumn: {
-      columns: ArrayNever
-      InsertPosition: number
-    }
-  }
 
   NewTable: {
     IsOpen: boolean
@@ -140,4 +81,63 @@ export type StateAuthStore = {
   LoginCheck: string
 
   StayConnected: boolean
+}
+export type StateTableEditStore = {
+  IsOpen: boolean
+  Error: string
+
+  CurrentSection: string
+  Sections: {
+    InsertRow: string
+    InsertColumn: string
+    SwapRows: string
+    SwapColumns: string
+    SwapCells: string
+  }
+  Navigation: boolean
+
+  Insert: {
+    Rows: {
+      Row: number
+      Position: "Above" | "Below"
+      Amount: number
+    }
+    Columns: {
+      Column: number
+      Position: "R" | "L"
+      Amount: number
+    }
+  }
+
+  Swap: {
+    Rows: {
+      First: number
+      Second: number
+    }
+    Columns: {
+      First: number
+      Second: number
+    }
+  }
+
+  SwapCells: {
+    FirstCell: {
+      Row: number
+      Column: number
+    }
+    SecondCell: {
+      Row: number
+      Column: number
+    }
+  }
+
+  TempRow: {
+    row: ArrayNever
+    InsertPosition: number
+  }
+
+  TempColumn: {
+    columns: ArrayNever
+    InsertPosition: number
+  }
 }
