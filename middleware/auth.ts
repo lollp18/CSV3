@@ -9,12 +9,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       : await navigateTo("/")
   }
   if (from.path === "/SingleUp" && to.path === "/Csv") {
-    const status = await AuthStore.Singelup()
+    const status = await AuthStore.SignUp()
 
     return status === 202
-      ? await navigateTo("/SingleUp")
+      ? await navigateTo("/SignUp")
       : status === 201
       ? navigateTo("/CSV")
-      : await navigateTo("/SingleUp")
+      : await navigateTo("/SignUp")
   }
 })

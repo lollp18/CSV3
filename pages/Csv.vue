@@ -5,24 +5,24 @@ definePageMeta({
 
 onBeforeMount(async () => {
   await nextTick(async () => {})
-  await MainStore.SetApiUrlUserTables()
+  await ApiStore.SetApiUrlUserTables()
 })
 
 onUpdated(() => {
   nextTick(() => {
-    MainStore.InitSeitenBerechnen()
-    MainStore.SetCurrentSeiteFirst()
+    PageStore.InitSeitenBerechnen()
+    PageStore.PageNav("GoFirst")
   })
 })
 
 onMounted(() => {
   nextTick(() => {
-    MainStore.InitSeitenBerechnen()
-    MainStore.SetCurrentSeiteFirst()
+    PageStore.InitSeitenBerechnen()
+    PageStore.PageNav("GoFirst")
   })
 
   window.addEventListener("resize", () => {
-    MainStore.ResizeWindow()
+    PageStore.ResizeWindow()
   })
 })
 
@@ -32,11 +32,10 @@ onUnmounted(() => {
 </script>
 
 <template>
- 
-  <Bearbeiten v-if="MainStore.TableBearbeitenOpen" />
+  <Header />
+  <TableEditMain v-if="MainStore.TableBearbeitenOpen" />
   <NewTable v-if="MainStore.NewTableIsOpen" />
 
-  <Header />
   <NoTable v-if="MainStore.CurrentTablesSize === 0" />
 
   <Table v-if="MainStore.CurrentTablesSize >= 1" />

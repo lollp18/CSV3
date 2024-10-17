@@ -4,13 +4,13 @@ const Store = defineStore("AuthStore", {
   state: (): StateAuthStore => ({
     StorageData: undefined,
 
-    SingleUpData: {
+    SignUpData: {
       Username: "Lorenzo",
       Email: "Lorenzo12696@gmail.com",
       Password: "123",
       PasswordRepeat: "123",
     },
-    SingleUpCheck: undefined,
+    SignUpCheck: undefined,
 
     LoginData: {
       Email: "Lorenzo12696@gmail.com",
@@ -27,7 +27,7 @@ const Store = defineStore("AuthStore", {
       if ((sessionStorage || localStorage).length > 0) {
         this.LoginData = this.StorageData
         this.StayConnected = sessionStorage.length > 0 ? false : true
-        await MainStore.SetCurrentURL(MainStore.ApiURLs.LocalBaseUrl)
+        await ApiStore.SetCurrentURL(ApiStore.LocalBaseUrl)
         await this.Login()
       }
     },
@@ -35,9 +35,9 @@ const Store = defineStore("AuthStore", {
     async Login() {
       try {
         const { data, status } = await axios.post(
-          MainStore.ApiURLs.ApiUrlUserLogin,
+          ApiStore.ApiUrlUserLogin,
           this.LoginData,
-          MainStore.ApiURLs.requestOptions
+          ApiStore.RequestOptions
         )
 
         if (status === 202) {
@@ -59,22 +59,22 @@ const Store = defineStore("AuthStore", {
       this.StorageData = useStorage("Csv", this.LoginData, Storage).value
     },
 
-    async Singelup() {
+    async SignUp() {
       try {
-        if (this.SingleUpData.Password !== this.SingleUpData.PasswordRepeat) {
-          this.SingleUpCheck = "Passwörter sind nicht identisch"
+        if (this.SignUpData.Password !== this.SignUpData.PasswordRepeat) {
+          this.SignUpCheck = "Passwörter sind nicht identisch"
           return 202
         } else {
           const res = await axios.post(
-            MainStore.ApiURLs.ApiUrlUsersSingleUp,
-            this.SingleUpData
+            ApiStore.ApiUrlUserSignUp,
+            this.SignUpData
           )
           console.log("ok")
           if (res.status === 202) {
-            this.SingleUpCheck = res.data
+            this.SignUpCheck = res.data
             return 202
           } else if (res.status === 201) {
-            const { Email, Password } = this.SingleUpData
+            const { Email, Password } = this.SignUpData
             this.LoginData = { Email, Password }
 
             return 201

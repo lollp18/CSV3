@@ -1,32 +1,29 @@
-<script setup>
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 <template>
-  <div class="box">
-    <h1>Zellen Tauschen</h1>
-    <h2 style="color: red">{{ store.TableBearbeiten.Error }}</h2>
-    <h2>Erste Zelle</h2>
+  <TableEditSectionForm
+    SectionTitle="Swap Cells"
+    @FormAction="TableEditStore.InitCellsSwap">
+    <h2>First Cell</h2>
     <input
-      v-model="store.TableBearbeiten.ZellenTauschen.ErsteZelle.Zeile"
+      v-model="TableEditStore.SwapCells.FirstCell.Row"
       type="number"
-      placeholder="Zeilennummer" />
+      min="1"
+      placeholder="Row Number" />
     <input
-      v-model="store.TableBearbeiten.ZellenTauschen.ErsteZelle.Spalte"
+      v-model="TableEditStore.SwapCells.FirstCell.Column"
       type="number"
-      placeholder="Spaltennummer" />
-    <h2>Zweite Zelle</h2>
+      min="1"
+      placeholder="Column Number" />
+    <h2>Second Cell</h2>
     <input
-      v-model="store.TableBearbeiten.ZellenTauschen.ZweiteZelle.Zeile"
+      v-model="TableEditStore.SwapCells.SecondCell.Row"
       type="number"
-      placeholder="Zeilennummer" />
+      min="1"
+      placeholder="Row Number" />
     <input
-      v-model="store.TableBearbeiten.ZellenTauschen.ZweiteZelle.Spalte"
+      v-model="TableEditStore.SwapCells.SecondCell.Column"
       type="number"
-      placeholder="Spaltenummer" />
-
-    <button class="BtnAddBearbeiten" @click="store.ZellenTauschen()">
-      <ion-icon name="swap-horizontal-outline"></ion-icon>
-    </button>
-  </div>
+      min="1"
+      placeholder="Column Number" />
+  </TableEditSectionForm>
 </template>

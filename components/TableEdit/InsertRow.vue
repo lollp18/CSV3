@@ -1,30 +1,24 @@
-<script setup>
-
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 <template>
-  <div class="box">
-    <h1>Zeilen Einfügen</h1>
-    <h2 style="color: red">{{ store.TableBearbeiten.Error }}</h2>
+  <TableEditSectionForm
+    SectionTitle="Insert Row"
+    @FormAction="TableEditStore.InitInsertRow">
+    <input
+      min="1"
+      v-model="TableEditStore.Insert.Rows.Row"
+      placeholder="Enter Row"
+      type="number" />
+    <Select
+      :Options="[
+        { value: 'Above', label: 'Above' },
+        { value: 'Below', label: 'Below' },
+      ]"
+      @ActionChange="TableEditStore.GetOptionValue($event, 'Rows')" />
 
     <input
       min="1"
-      v-model="store.TableBearbeiten.Einfügen.Zeilen.Zeile"
-      placeholder="Welche zeile"
+      v-model="TableEditStore.Insert.Rows.Amount"
+      placeholder="Amount"
       type="number" />
-    <select @change="store.GetOptionZeile">
-      <option value="Über">Über</option>
-      <option value="Unter">Unter</option>
-    </select>
-    <input
-      min="1"
-      v-model="store.TableBearbeiten.Einfügen.Zeilen.Anzahl"
-      placeholder="Anzahl"
-      type="number" />
-    <button class="BtnAddBearbeiten" @click="store.ZeilenEinfügen()">
-      <ion-icon name="add-outline"></ion-icon>
-    </button>
-  </div>
+  </TableEditSectionForm>
 </template>
-

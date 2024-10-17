@@ -1,30 +1,28 @@
-<script setup>
-
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 <template>
   <Transition>
-    <div class="new-Tabel-bg">
-      <div class="new-Tabel">
-        <div class="new-Tabel-Input-rapper">
-          <h1>Neue Tabelle Generiren</h1>
-          <h2 style="color: red">{{ store.NewTable.Error }}</h2>
+    <div class="new-Table-bg">
+      <div class="new-Table">
+        <div class="new-Table-Input-rapper">
+          <h1>Generate New Table</h1>
+          <ErrorBox> {{ NewTableStore.Error }}</ErrorBox>
           <input
-            v-model="store.NewTable.TableName"
-            placeholder="Tabllen Name" />
+            v-model="NewTableStore.TableName"
+            placeholder="Table Name" />
           <input
-            v-model="store.NewTable.AnzahlZeilen"
-            placeholder="Anzahl der Zeilen" />
+            min="1"
+            v-model="NewTableStore.NumberOfRows"
+            placeholder="Number of Rows" />
           <input
-            v-model="store.NewTable.AnzahlSpalten"
-            placeholder="Anzahl der Spalten" />
+            min="1"
+            v-model="NewTableStore.NumberOfColumns"
+            placeholder="Number of Columns" />
         </div>
-        <div class="new-Tabel-btnRapper">
-          <button @click="store.CreateNewTable()">
+        <div class="new-Table-btnRapper">
+          <button @click="NewTableStore.CreateNewTable">
             <ion-icon name="duplicate-outline"></ion-icon>
           </button>
-          <button @click="store.NewTableIsOpen = false">
+          <button @click="NewTableStore.IsOpen = false">
             <ion-icon name="close-outline"></ion-icon>
           </button>
         </div>
@@ -36,7 +34,7 @@ const store = UseMainStore()
 
 @import "../assets/style/main.sass"
 
-.new-Tabel-bg
+.new-Table-bg
   @include Center
   position: fixed
   top: 0
@@ -45,7 +43,7 @@ const store = UseMainStore()
   height: 100vh
   background-color: rgba(0, 0, 0, 0.5)
 
-.new-Tabel
+.new-Table
   @include DreiD
   @include Center
   @include FelxColum
@@ -62,13 +60,13 @@ const store = UseMainStore()
   border-radius: 10px
 
 
-.new-Tabel-Input-rapper
+.new-Table-Input-rapper
   display: flex
   flex-direction: column
   gap: 1.5rem
 
 
-.new-Tabel-btnRapper
+.new-Table-btnRapper
   display: flex
   gap: 1.5rem
 </style>

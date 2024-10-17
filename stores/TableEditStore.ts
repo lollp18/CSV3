@@ -1,4 +1,4 @@
-const UseTableEditStore = defineStore("StoreTableEdit", {
+const UseTableEditStore = defineStore("TableEditStore", {
   state: (): StateTableEditStore => ({
     IsOpen: false,
     Error: "",
@@ -73,8 +73,8 @@ const UseTableEditStore = defineStore("StoreTableEdit", {
     ToggelNavigation() {
       this.Navigation = !this.Navigation
     },
-    GetOptionValue(value: string, type: "Rows" | "Columns") {
-      this.Insert[type].Position = value
+    GetOptionValue(e: Event, type: "Rows" | "Columns") {
+      this.Insert[type].Position = GetEventValue(e)
     },
     GetInsertIndex(type: "Rows" | "Columns") {
       const { Position } = this.Insert[type]

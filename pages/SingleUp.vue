@@ -1,24 +1,24 @@
 <script setup>
 onBeforeMount(async () => {
-  await MainStore.SetCurrentURL(MainStore.ApiURLs.BaseUrlLocl)
+  await ApiStore.SetCurrentURL(ApiStore.BaseUrlLocl)
 })
 </script>
 
 <template>
   <AuthForm>
-    <template #error> {{ AuthStore.SingleUpCheck }}</template>
+    <template #error> {{ AuthStore.SignUpCheck }}</template>
     <template #main>
       <input
-        v-model="AuthStore.SingleUpData.Username"
+        v-model="AuthStore.SignUpData.Username"
         placeholder="Username" />
       <input
-        v-model="AuthStore.SingleUpData.Email"
+        v-model="AuthStore.SignUpData.Email"
         placeholder="Email" />
       <input
-        v-model="AuthStore.SingleUpData.Password"
+        v-model="AuthStore.SignUpData.Password"
         placeholder="Password" />
       <input
-        v-model="AuthStore.SingleUpData.PasswordRepeat"
+        v-model="AuthStore.SignUpData.PasswordRepeat"
         placeholder="Password Repeat" />
       <router-link
         to="/Csv"

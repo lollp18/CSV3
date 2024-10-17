@@ -1,23 +1,15 @@
-<script setup>
-
-
-const store = UseMainStore()
-</script>
+<script setup></script>
 <template>
-  <div class="box">
-    <h1>Spalte Tauschen</h1>
-    <h2 style="color: red">{{ store.TableBearbeiten.Error }}</h2>
+  <TableEditSectionForm SectionTitle=" Swap Columns" @FormAction="TableEditStore.InitSwapColumns" >
     <input
-      v-model="store.TableBearbeiten.Tauschen.Spalten.Erste"
-      placeholder="spalte eintragen"
+      v-model="TableEditStore.Swap.Columns.First"
+      placeholder="Column Number"
+      min="1"
       type="number" />
     <input
-      v-model="store.TableBearbeiten.Tauschen.Spalten.Zweite"
-      placeholder="spalte eintragen"
+      v-model="TableEditStore.Swap.Columns.Second"
+      placeholder="Column Number"
+      min="1"
       type="number" />
-    <button class="BtnAddBearbeiten" @click="store.SpaltenTauschen()">
-      <ion-icon name="swap-horizontal-outline"></ion-icon>
-    </button>
-  </div>
+  </TableEditSectionForm>
 </template>
-

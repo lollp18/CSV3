@@ -21,43 +21,6 @@ export type StateMainStore = {
   }
 
   DownloadFileHref: string
-
-  NewTable: {
-    IsOpen: boolean
-    Error: string
-    TableName: string
-    NumberOfRows: number
-    NumberOfColumns: number
-  }
-
-  PageSettings: {
-    CurrentPages: ArrayPage
-    MaxPageLength: number
-    MinPageLength: number
-    CellWidth: number
-    NumberOfPages: number
-    WindowHeight: number
-
-    CurrentPage: {
-      Number: number
-      Start: number
-      End: number
-    }
-  }
-
-  ApiURLs: {
-    CurrentUrl: string
-    BaseUrl: string
-    LocalBaseUrl: string
-    ApiUrlUserSignUp: string
-    ApiUrlUserLogin: string
-    ApiUrlUserTables: string
-    ApiUrlDeleteTable: string
-    requestOptions: {
-      withCredentials: boolean
-      baseURL: string
-    }
-  }
 }
 
 export type LoginData = {
@@ -139,5 +102,39 @@ export type StateTableEditStore = {
   TempColumn: {
     columns: ArrayNever
     InsertPosition: number
+  }
+}
+export type StatePageStore = {
+  CurrentPages: ArrayPage
+  MaxPageLength: number
+  MinPageLength: number
+  CellWidth: number
+  NumberOfPages: number
+  WindowHeight: number
+
+  CurrentPage: {
+    Number: number
+    Start: number
+    End: number
+  }
+}
+export type StateNewTableStore = {
+  IsOpen: boolean
+  Error: string
+  TableName: string
+  NumberOfRows: number
+  NumberOfColumns: number
+}
+export type StateApiStore = {
+  CurrentUrl: string
+  BaseUrl: string
+  LocalBaseUrl: string
+  ApiUrlUserSignUp: string
+  ApiUrlUserLogin: string
+  ApiUrlUserTables: string
+  ApiUrlDeleteTable: string
+  RequestOptions: {
+    withCredentials: boolean
+    baseURL: string
   }
 }

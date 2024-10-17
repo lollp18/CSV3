@@ -22,48 +22,8 @@ export const UseMainStore = defineStore("MainStore", {
     },
 
     DownloadFileHref: "",
-
-    NewTable: {
-      IsOpen: false,
-      Error: "",
-      TableName: "",
-      NumberOfRows: 0,
-      NumberOfColumns: 0,
-    },
-
-    PageSettings: {
-      CurrentPages: [],
-      MaxPageLength: 21,
-      MinPageLength: 1,
-      CellWidth: 77,
-      NumberOfPages: 0,
-      WindowHeight: 0,
-
-      CurrentPage: {
-        Number: 0,
-        Start: 0,
-        End: 0,
-      },
-    },
-
-    ApiURLs: {
-      CurrentUrl: "",
-      BaseUrl: "",
-      LocalBaseUrl: "http://localhost:8080",
-      ApiUrlUserSignUp: "auth/registrieren",
-      ApiUrlUserLogin: "auth/login",
-      ApiUrlUserTables: "",
-      ApiUrlDeleteTable: "",
-      requestOptions: {
-        withCredentials: false,
-        baseURL: "",
-      },
-    },
   }),
   getters: {
-    CurrentPage: (state) => state.PageSettings.CurrentPage,
-    CurrentPageStart: (state) => state.PageSettings.CurrentPage.Start,
-    CurrentPageEnd: (state) => state.PageSettings.CurrentPage.End,
     FirstRowLength: (state) => state.CurrentTable.TableData.get(1)?.size,
     FirstCellActive: (state) =>
       state.CurrentTable?.TableData.get(1)?.get(1)?.Active,
@@ -75,106 +35,6 @@ export const UseMainStore = defineStore("MainStore", {
     CurrentTablesSize: (state) => state.CurrentTables?.size,
   },
   actions: {
-    InitPageCalculate() {
-      this.SetTableSize()
-      this.ResizeWindow()
-    },
-
-    SetCurrentPageFirst() {
-      this.PageSettings.CurrentPage = this.PageSettings.CurrentPages[0]
-    },
-
-    CalculateMax() {
-      const { WindowHeight, CellWidth } = this.PageSettings
-      this.PageSettings.MaxPageLength = Math.round(
-        (WindowHeight - 200) / CellWidth
-      )
-    },
-    ResizeWindow() {
-      this.PageSettings.WindowHeight =
-        useNuxtApp().vueApp._container?.clientWidth || 0
-      this.CalculateMax()
-      this.CalculatePages()
-
-      this.PageSettings.CurrentPage =
-        this.PageSettings.CurrentPages[this.PageSettings.CurrentPage.Number - 1]
-    },
-    CalculatePages() {
-      this.PageSettings.CurrentPages = []
-      const MaxPageLength = this.PageSettings.MaxPageLength - 1
-      this.PageSettings.CurrentPages.push(new Page(MaxPageLength))
-      this.calculatePageCount()
-
-      for (let i = 0; i < this.PageSettings.NumberOfPages; i++) {
-        const currentSeite = this.PageSettings.CurrentPages[i],
-          seite = new Page(
-            currentSeite.End + MaxPageLength,
-            currentSeite.Number + 1,
-            currentSeite.End + 1
-          )
-
-        this.PageSettings.CurrentPages.push(seite)
-      }
-    },
-    calculatePageCount() {
-      let tableWidth = this.TableSize.Width
-      let pageCount = 1
-
-      while (tableWidth >= this.PageSettings.MaxPageLength) {
-        pageCount++
-        let remainingWidth = tableWidth - this.PageSettings.MaxPageLength
-        tableWidth = remainingWidth
-      }
-
-      this.PageSettings.NumberOfPages = pageCount - 1
-    },
-    //Seiten wechseln
-    PageNav(NavKey: string) {
-      const NavKeys = {
-        GoBack: this.CurrentPage.Number - 2,
-        GoForward: this.CurrentPage.Number,
-        GoFirst: 0,
-        GoLast: this.CurrentPage.Number - 1,
-      }
-
-      this.PageSettings.CurrentPage =
-        this.PageSettings.CurrentPages[NavKeys[NavKey] || 0]
-    },
-
-    //Create new Table
-
-    CreateNewTable() {
-      const { NumberOfColumns, NumberOfRows, TableName } = this.NewTable
-
-      if (this.CheckNewTable()) {
-        this.CurrenTablesPuhs(
-          new Table({
-            TableName,
-            TableData: GenerateTableData(NumberOfColumns, NumberOfRows),
-          })
-        )
-        this.GetSelectTabel(this.CurrentTablesSize)
-        this.SetAllSectonsFalse()
-      }
-    },
-    CheckNewTable() {
-      const { NumberOfColumns, NumberOfRows, TableName } = this.NewTable
-      let CheckOk = false
-
-      this.CurrentTables.values().some((Table) => Table.TableName === TableName)
-        ? (this.NewTable.Error = "This name is already taken")
-        : NumberOfColumns <= 0
-        ? (this.NewTable.Error = "The number of columns is too small")
-        : NumberOfRows <= 0
-        ? (this.NewTable.Error = "The number of rows is too small")
-        : (CheckOk = true)
-
-      return CheckOk
-    },
-    // Tabelle bearbeiten
-
-    // Zellen tauschen
-
     // Download File
 
     async DownlodFile(TableIndex: number) {
@@ -196,9 +56,8 @@ export const UseMainStore = defineStore("MainStore", {
 
       return papa.unparse(formattedData)
     },
-    //Tabelle Löschen
 
-    DeleteColum(Index: number) {
+    DeleteTableColum(Index: number) {
       let temp = this.CurrentTable.TableData,
         temp2 = new Map(),
         NewKey = 0
@@ -220,7 +79,7 @@ export const UseMainStore = defineStore("MainStore", {
 
       this.CurrentTable.TableData = temp2
     },
-    DeleteRow(key: number) {
+    DeleteTableRow(key: number) {
       let temp = this.CurrentTable.TableData
       temp.delete(key)
 
@@ -232,7 +91,6 @@ export const UseMainStore = defineStore("MainStore", {
         this.CurrentTable.TableData.set(NewKey, new Map(Row))
       })
     },
-    // Uploade File
 
     CreateTable(FileName: "", FileData: CsvData) {
       this.CurrenTablesPuhs(
@@ -250,8 +108,6 @@ export const UseMainStore = defineStore("MainStore", {
       this.CreateTable(File.name.slice(0, -4), papa.parse(File.text()).data)
     },
 
-    // Zellen bearbeiten
-
     UpdateCell(
       Row: number,
       Column: number,
@@ -268,10 +124,11 @@ export const UseMainStore = defineStore("MainStore", {
 
       this.CurrentTable.TableData.get(row).get(column).CellContent = CellContent
     },
-    // selcet get set values
 
-
-
+    CloseAllWindos() {
+      TableEditStore.IsOpen = false
+      NewTableStore.IsOpen = false
+    },
     SetCurrentTableName() {
       this.CurrentTables.get(this.CurrentTableId).TableName =
         this.CurrentTable.TableName
@@ -284,21 +141,6 @@ export const UseMainStore = defineStore("MainStore", {
       this.CurrentTableId = TableIndex
 
       this.CurrentTable = this.CurrentTables?.get(TableIndex)
-    },
-    async SetCurrentURL(Api: string) {
-      this.ApiURLs.CurrentUrl = Api
-
-      this.ApiURLs.ApiUrlUserLogin = Api + this.ApiURLs.ApiUrlUserLogin
-
-      this.ApiURLs.ApiUrlUserSignUp = Api + this.ApiURLs.ApiUrlUserSignUp
-
-      this.ApiURLs.requestOptions.baseURL = Api
-    },
-    async SetApiUrlUserTables() {
-      const { _id } = this.UserData
-      const UserUrl = this.ApiURLs.CurrentUrl + "user/"
-      this.ApiURLs.ApiUrlUserTables = `${UserUrl}${_id}/tables`
-      this.ApiURLs.ApiUrlDeleteTable = `${UserUrl}${_id}/tables/`
     },
 
     async SetUserdata(data: { Username: string; _id: string }) {
@@ -346,53 +188,6 @@ export const UseMainStore = defineStore("MainStore", {
     },
     async CurrenTablesPuhs(Table: TableType<TableDataMap>) {
       this.CurrentTables.set(this.CurrentTablesSize + 1, Table)
-    },
-    // Requests
-
-    async GetTables() {
-      try {
-        const { data } = await axios.get(
-          this.ApiURLs.ApiUrlUserTables,
-          this.ApiURLs.requestOptions
-        )
-
-        await this.PrepareTableToStore(data)
-
-        await this.GetSelectTable(1)
-      } catch (er) {
-        console.log(er)
-      }
-    },
-    async SaveTables() {
-      try {
-        const sendTables = this.PrepareTableToSend(this.CurrentTables)
-
-        const res = await axios.patch(
-          this.ApiURLs.ApiUrlUserTables,
-          {
-            CurrentTables: sendTables,
-          },
-          this.ApiURLs.requestOptions
-        )
-
-        return res.statusText
-      } catch (error) {
-        console.error(error.message)
-      }
-    },
-    async DeleteTable(TableId: string) {
-      try {
-        const res = await axios.delete(
-          `${this.ApiURLs.ApiUrlDeleteTable}${TableId}`,
-          this.ApiURLs.requestOptions
-        )
-
-        if (res.status === 200) {
-          await this.GetTables()
-        }
-      } catch (error) {
-        console.error(error.message)
-      }
     },
   },
 })

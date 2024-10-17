@@ -8,13 +8,13 @@
         <div class="zelle-placeholder"></div>
         <div class="zelle-placeholder"></div>
         <BtnDelet
-          v-if="MainStore.FirstZeileLength > 2"
+          v-if="MainStore.FirstRowLength > 2"
           @click="MainStore.SpalteLöschen(1)" />
         <div
           v-else
           class="zelle-placeholder"></div>
         <div
-          v-for="NummberFirstZeile in MainStore.FirstZeileLength"
+          v-for="NummberFirstZeile in MainStore.FirstRowLength"
           :key="NummberFirstZeile">
           <BtnDelet
             @click="MainStore.SpalteLöschen(NummberFirstZeile)"
@@ -60,7 +60,7 @@
         <div class="t-header">
           <div
             ref="zelle"
-            :class="MainStore.FirstZelleActive ? 'zelle-activ' : 'zelle'"
+            :class="MainStore.FirstCellActive ? 'zelle-activ' : 'zelle'"
             @click="
               MainStore.InitZelleBerarbeiten(
                 1,

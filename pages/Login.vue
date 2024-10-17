@@ -1,6 +1,6 @@
 <script setup>
-onBeforeMount(async() => {
- await MainStore.SetCurrentURL(MainStore.ApiURLs.LocalBaseUrl)
+onBeforeMount(async () => {
+  await ApiStore.SetCurrentURL(ApiStore.LocalBaseUrl)
 })
 </script>
 
