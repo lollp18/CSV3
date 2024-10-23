@@ -10,15 +10,16 @@ onBeforeMount(async () => {
 
 onUpdated(() => {
   nextTick(() => {
-    PageStore.InitSeitenBerechnen()
+    PageStore.InitPageCalculate()
     PageStore.PageNav("GoFirst")
   })
 })
 
 onMounted(() => {
   nextTick(() => {
-    PageStore.InitSeitenBerechnen()
+    PageStore.InitPageCalculate()
     PageStore.PageNav("GoFirst")
+    
   })
 
   window.addEventListener("resize", () => {
@@ -33,12 +34,12 @@ onUnmounted(() => {
 
 <template>
   <Header />
-  <TableEditMain v-if="MainStore.TableBearbeitenOpen" />
-  <NewTable v-if="MainStore.NewTableIsOpen" />
+  <TableEditMain v-if="TableEditStore.IsOpen" />
+  <NewTable v-if="NewTableStore.IsOpen" />
 
   <NoTable v-if="MainStore.CurrentTablesSize === 0" />
 
-  <Table v-if="MainStore.CurrentTablesSize >= 1" />
+  <TableMain v-if="MainStore.CurrentTablesSize >= 1" />
   <Footer v-if="MainStore.CurrentTablesSize >= 1" />
 </template>
 

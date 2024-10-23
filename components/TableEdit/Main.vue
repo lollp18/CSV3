@@ -83,7 +83,7 @@ export default {
 <style scoped lang="sass">
 @import "../assets/style/main.sass"
 .draggable-container
-  @include DreiD()
+  @include threeD()
   position: absolute
   top: 50%
   left: 50%

@@ -34,6 +34,7 @@
   </aside>
 </template>
 <style lang="sass">
+@import "../assets/style/main.sass"
 aside
   @include FelxColum()
   gap: 1.5rem

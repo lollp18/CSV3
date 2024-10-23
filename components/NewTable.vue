@@ -44,7 +44,7 @@
   background-color: rgba(0, 0, 0, 0.5)
 
 .new-Table
-  @include DreiD
+  @include threeD
   @include Center
   @include FelxColum
 

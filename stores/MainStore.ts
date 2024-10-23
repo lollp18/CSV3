@@ -20,7 +20,7 @@ export const UseMainStore = defineStore("MainStore", {
       IsOpen: false,
       Text: "",
     },
-
+    TableNameEdit: false,
     DownloadFileHref: "",
   }),
   getters: {
@@ -99,13 +99,17 @@ export const UseMainStore = defineStore("MainStore", {
           TableData: TableDataToMap(CsvDataToTableDataArray(FileData)),
         })
       )
-      this.GetSelectTabel(this.CurrentTablesSize)
+      this.GetSelectTable(this.CurrentTablesSize)
     },
 
     async GetFileData(e) {
       const [File] = await e.target.files
+      console.log()
 
-      this.CreateTable(File.name.slice(0, -4), papa.parse(File.text()).data)
+      this.CreateTable(
+        File.name.slice(0, -4),
+        papa.parse(await File.text()).data
+      )
     },
 
     UpdateCell(
@@ -118,13 +122,17 @@ export const UseMainStore = defineStore("MainStore", {
       this.CurrentTable.LastCell = this.CurrentTable.CurrentCell
 
       this.CurrentTable.CurrentCell = { Row, Column, CellContent, Active }
+      this.CurrentTable.TableData.get(Row).get(Column).Active = true
 
-      this.CurrentTable.TableData.get(row).get(column).Active = true
       this.CurrentTable.TableData.get(lastRow).get(lastColumn).Active = false
 
-      this.CurrentTable.TableData.get(row).get(column).CellContent = CellContent
+      this.CurrentTable.TableData.get(Row).get(Column).CellContent = CellContent
+     
     },
-
+    async SetCellValue() {
+      const { Row, Column, CellContent } = this.CurrentTable.CurrentCell
+      this.CurrentTable.TableData.get(Row).get(Column).CellContent = CellContent
+    },
     CloseAllWindos() {
       TableEditStore.IsOpen = false
       NewTableStore.IsOpen = false
@@ -134,8 +142,8 @@ export const UseMainStore = defineStore("MainStore", {
         this.CurrentTable.TableName
     },
     SetTableSize() {
-      this.TabelenGröße.höhe = this.CurrentTable.TableData.size
-      this.TabelenGröße.breite = this.CurrentTable.TableData?.get(1)?.size || 0
+      this.TableSize.Height = this.CurrentTable.TableData.size
+      this.TableSize.Width = this.CurrentTable.TableData?.get(1)?.size || 0
     },
     async GetSelectTable(TableIndex: number) {
       this.CurrentTableId = TableIndex

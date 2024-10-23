@@ -19,7 +19,7 @@ export type StateMainStore = {
     IsOpen: boolean
     Text: string
   }
-
+  TableNameEdit: boolean
   DownloadFileHref: string
 }
 

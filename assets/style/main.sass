@@ -1,6 +1,4 @@
 
-  
-  
 $MainColor: #fff
 $SecondaryColor: #000
 $tableBorderColor: #e9ecef
@@ -8,7 +6,7 @@ $InvalideCloseColor: #c92a2a
 $draggableBorderColor:rgba(0, 0, 0, 0.119)
 $MainBorderColor:rgba(0, 0, 0, 0.119)
 $boxShadowColor:rgba(0, 0, 0, 0.06)
-$ZellePlaceholderBackgroundColor: #f8f9fa
+$CellPlaceholderBackgroundColor: #f8f9fa
 $Border-Radius:10px
   
 @mixin FelxColum
@@ -25,20 +23,21 @@ $Border-Radius:10px
 @mixin Border-r
   border-radius: $Border-Radius
   
-@mixin DreiD
+@mixin threeD
   @include Border
   box-shadow: 0 0 15px 4px $boxShadowColor
 
 
 @mixin Input
-  @include DreiD
+  @include  threeD
+  
   padding: 0.7rem
   font-size: 1.5rem
   border-radius: 10px
   border: 0
 
 @mixin Select
-  @include DreiD
+  @include  threeD
   padding: 1rem
   font-size: 1.5rem
   border-radius: 10px
@@ -46,7 +45,8 @@ $Border-Radius:10px
     
 @mixin Button
   @include Center
-  @include DreiD
+  @include  threeD
+  
   background-color: $MainColor
   color: $SecondaryColor
   font-size: 1.5rem
@@ -55,8 +55,8 @@ $Border-Radius:10px
  
    
 
-@mixin Zelle
-
+@mixin Cell
+  padding-top: 2px
   text-align: center
   overflow: hidden
   white-space: nowrap

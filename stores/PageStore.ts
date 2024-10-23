@@ -1,7 +1,7 @@
 const store = defineStore("PageStore", {
   state: (): StatePageStore => ({
     CurrentPages: [],
-    MaxPageLength: 21,
+    MaxPageLength: 22,
     MinPageLength: 1,
     CellWidth: 77,
     NumberOfPages: 0,
@@ -26,11 +26,10 @@ const store = defineStore("PageStore", {
   actions: {
     InitPageCalculate() {
       MainStore.SetTableSize()
-      this.ResizeWindow()
-    },
-
-    SetCurrentPageFirst() {
-      this.CurrentPage = this.CurrentPages[0]
+      this.WindowHeight = useNuxtApp().vueApp._container?.clientWidth || 0
+      this.CalculateMax()
+      this.CalculatePages()
+      this.PageNav("GoFirst")
     },
 
     CalculateMax() {

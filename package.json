@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/google-fonts": "^3.2.0",
     "@pinia/nuxt": "^0.5.1",
     "@vueuse/nuxt": "^9.1.1",
     "axios": "^1.6.7",
@@ -24,15 +25,16 @@
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.2.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
     "@types/node": "^20.11.20",
     "@types/papaparse": "^5.3.14",
     "@types/underscore": "^1.11.15",
-    "autoprefixer": "^10.4.17",
+    "autoprefixer": "^10.4.20",
     "nuxt": "^3.13.1",
-    "postcss": "^8.4.35",
+    "postcss": "^8.4.47",
     "sass": "^1.77.8",
     "sass-loader": "^14.1.1",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.14",
     "typescript": "^5.3.3",
     "vue-tsc": "^2.0.29"
   }

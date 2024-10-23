@@ -34,6 +34,7 @@ const Store = defineStore("AuthStore", {
 
     async Login() {
       try {
+        console.log(ApiStore.ApiUrlUserLogin)
         const { data, status } = await axios.post(
           ApiStore.ApiUrlUserLogin,
           this.LoginData,

@@ -1,6 +1,9 @@
 <script setup>
 useHead({
-  title: "CSV",
+  title: "CSV3",
+  htmlAttrs: {
+    lang: "en",
+  },
   script: [
     {
       type: "module",

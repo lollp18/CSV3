@@ -2,7 +2,7 @@ const store = defineStore("ApiStore", {
   state: (): StateApiStore => ({
     CurrentUrl: "",
     BaseUrl: "",
-    LocalBaseUrl: "http://localhost:8080",
+    LocalBaseUrl: "http://localhost:8080/",
     ApiUrlUserSignUp: "auth/registrieren",
     ApiUrlUserLogin: "auth/login",
     ApiUrlUserTables: "",

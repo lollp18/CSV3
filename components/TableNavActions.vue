@@ -1,16 +1,28 @@
 <script setup></script>
 <template>
   <div class="ChooseBox">
+    <button
+      class="btn"
+      @click="NewTableStore.IsOpen = true">
+      <ion-icon name="add-outline"></ion-icon>
+    </button>
     <div
       class="ChooseBoxItem"
       v-for="([i, { TableName }], TableIndex) in MainStore.CurrentTables"
       :key="TableIndex">
-      <button @click="MainStore.GetSelectTable(TableIndex)">
+      <input
+        v-if="MainStore.TableNameEdit"
+        @input="MainStore.SetCurrentTableName()"
+        v-model="MainStore.CurrentTable.TableName" />
+      <button
+        v-if="!MainStore.TableNameEdit"
+        @dblclick="MainStore.TableNameEdit = true"
+        @click="MainStore.GetSelectTable(TableIndex)">
         {{ TableName }}
       </button>
       <button
         class="BtnDeletTable"
-        @click="MainStore.DeleteTable(TableIndex)">
+        @click="ApiStore.DeleteTable(TableIndex)">
         <ion-icon name="close-outline"></ion-icon>
       </button>
       <a
@@ -21,14 +33,10 @@
         <ion-icon name="download-outline"></ion-icon>
       </a>
     </div>
-    <button
-      class="btn"
-      @click="MainStore.NewTableIsOpen = true">
-      <ion-icon name="add-outline"></ion-icon>
-    </button>
   </div>
 </template>
 <style lang="sass" scoped>
+@import "../assets/style/main.sass"
 [name="download-outline"]
   color: #22c55e
 

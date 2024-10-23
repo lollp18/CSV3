@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   modules: [
     "@vueuse/nuxt",
     ["@pinia/nuxt", { autoImports: ["defineStore", "createPinia"] }],
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/google-fonts",
   ],
 
   imports: {
@@ -20,11 +22,16 @@ export default defineNuxtConfig({
       })
     },
   },
+  devtools: { enabled: true },
   typescript: {
     typeCheck: true,
   },
   css: ["~/assets/style/main.sass"],
-
+  googleFonts: {
+    families: {
+      Roboto: [400, 500, 700], // Specify the weights you need
+    },
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
