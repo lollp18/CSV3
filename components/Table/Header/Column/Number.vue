@@ -4,18 +4,14 @@
     <TableCell Varient="CellPlaceholder" />
 
     <TableCell Varient="CellNumber">1</TableCell>
-    <div
-      v-for="NumberFirstRow in MainStore.FirstRowLength"
-      :key="NumberFirstRow">
+    <template
+      v-for="NumberFirstColumn in MainStore.FirstColumnLength"
+      :key="NumberFirstColumn">
       <TableCell
-        v-if="
-          NumberFirstRow > 1 &&
-          NumberFirstRow >= PageStore.CurrentPageStart &&
-          NumberFirstRow <= PageStore.CurrentPageEnd
-        "
+        v-if="PageStore.GetPageDimension(NumberFirstColumn)"
         Varient="CellNumber">
-        {{ NumberFirstRow }}
+        {{ NumberFirstColumn }}
       </TableCell>
-    </div>
+    </template>
   </TableColumn>
 </template>

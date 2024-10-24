@@ -20,7 +20,7 @@
       v-if="MainStore.CurrentTablesSize >= 1">
       <input
         class="w-11/12"
-        placeholder="CellContent"
+        placeholder="Cell content"
         type="text"
         @input="MainStore.SetCellValue()"
         v-model="MainStore.CurrentTable.CurrentCell.CellContent" />

@@ -1,0 +1,4 @@
+<template>
+  <TableSidebarRowNumber />
+  <TableSidebarRowData />
+</template>

@@ -22,6 +22,8 @@ const store = defineStore("PageStore", {
       GoFirst: 0,
       GoLast: state.CurrentPage.Number - 1,
     }),
+    GetPageDimension: (state) => (Key: number) =>
+      Key > 1 && Key >= state.CurrentPage.Start && Key <= state.CurrentPage.End,
   },
   actions: {
     InitPageCalculate() {

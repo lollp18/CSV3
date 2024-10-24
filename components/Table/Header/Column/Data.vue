@@ -10,19 +10,15 @@
       {{ MainStore.FirstCellCellContent }}
     </TableCell>
 
-    <div
-      v-for="[CellIndex, { CellContent, Active }] in MainStore.FirstRow"
+    <template
+      v-for="[CellIndex, { CellContent, Active }] in MainStore.FirstColumn"
       :key="CellIndex">
       <TableCell
-        v-if="
-          CellIndex > 1 &&
-          CellIndex >= PageStore.CurrentPageStart &&
-          CellIndex <= PageStore.CurrentPageEnd
-        "
+        v-if="PageStore.GetPageDimension(CellIndex)"
         :Varient="Active ? 'CellActive' : 'Cell'"
         @click="MainStore.UpdateCell(1, CellIndex, CellContent)">
         {{ CellContent }}
       </TableCell>
-    </div>
+    </template>
   </TableColumn>
 </template>

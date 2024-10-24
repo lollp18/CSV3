@@ -8,15 +8,15 @@
     </button>
     <div
       class="ChooseBoxItem"
-      v-for="([i, { TableName }], TableIndex) in MainStore.CurrentTables"
+      v-for="[TableIndex, { TableName }] in MainStore.CurrentTables"
       :key="TableIndex">
       <input
         v-if="MainStore.TableNameEdit"
         @input="MainStore.SetCurrentTableName()"
         v-model="MainStore.CurrentTable.TableName" />
       <button
+        v-rightClick="(MainStore.TableNameEdit = true)"
         v-if="!MainStore.TableNameEdit"
-        @dblclick="MainStore.TableNameEdit = true"
         @click="MainStore.GetSelectTable(TableIndex)">
         {{ TableName }}
       </button>

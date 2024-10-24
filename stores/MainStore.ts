@@ -24,15 +24,16 @@ export const UseMainStore = defineStore("MainStore", {
     DownloadFileHref: "",
   }),
   getters: {
-    FirstRowLength: (state) => state.CurrentTable.TableData.get(1)?.size,
+    FirstColumnLength: (state) => state.CurrentTable.TableData.get(1)?.size,
     FirstCellActive: (state) =>
       state.CurrentTable?.TableData.get(1)?.get(1)?.Active,
     FirstCellCellContent: (state) =>
       state.CurrentTable?.TableData.get(1)?.get(1)?.CellContent,
-    FirstRow: (state) => state.CurrentTable?.TableData.get(1),
+    FirstColumn: (state) => state.CurrentTable?.TableData.get(1),
     CurrentTableLength: (state) => state.CurrentTable?.TableData.size,
     CurrentTableTableData: (state) => state.CurrentTable?.TableData,
     CurrentTablesSize: (state) => state.CurrentTables?.size,
+    
   },
   actions: {
     // Download File
@@ -127,7 +128,6 @@ export const UseMainStore = defineStore("MainStore", {
       this.CurrentTable.TableData.get(lastRow).get(lastColumn).Active = false
 
       this.CurrentTable.TableData.get(Row).get(Column).CellContent = CellContent
-     
     },
     async SetCellValue() {
       const { Row, Column, CellContent } = this.CurrentTable.CurrentCell
